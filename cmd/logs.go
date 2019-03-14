@@ -8,6 +8,7 @@ import (
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	boshuuid "github.com/cloudfoundry/bosh-utils/uuid"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshssh "github.com/cloudfoundry/bosh-cli/ssh"
 )
@@ -33,14 +34,14 @@ func NewLogsCmd(
 	}
 }
 
-func (c LogsCmd) Run(opts LogsOpts) error {
+func (c LogsCmd) Run(opts boshopts.LogsOpts) error {
 	if opts.Follow || opts.Num > 0 {
 		return c.tail(opts)
 	}
 	return c.fetch(opts)
 }
 
-func (c LogsCmd) tail(opts LogsOpts) error {
+func (c LogsCmd) tail(opts boshopts.LogsOpts) error {
 	sshOpts, connOpts, err := opts.GatewayFlags.AsSSHOpts()
 	if err != nil {
 		return err
@@ -63,7 +64,7 @@ func (c LogsCmd) tail(opts LogsOpts) error {
 	return nil
 }
 
-func (c LogsCmd) buildTailCmd(opts LogsOpts) []string {
+func (c LogsCmd) buildTailCmd(opts boshopts.LogsOpts) []string {
 	cmd := []string{"sudo", "bash", "-c"}
 	tail := []string{"exec", "tail"}
 
@@ -107,7 +108,7 @@ func (c LogsCmd) buildTailCmd(opts LogsOpts) []string {
 	return cmd
 }
 
-func (c LogsCmd) fetch(opts LogsOpts) error {
+func (c LogsCmd) fetch(opts boshopts.LogsOpts) error {
 	slug := opts.Args.Slug
 	name := c.deployment.Name()
 

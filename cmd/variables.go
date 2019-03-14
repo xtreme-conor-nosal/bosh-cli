@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -17,7 +18,7 @@ func NewVariablesCmd(ui boshui.UI, deployment boshdir.Deployment) VariablesCmd {
 	return VariablesCmd{ui: ui, deployment: deployment}
 }
 
-func (c VariablesCmd) Run(opts VariablesOpts) error {
+func (c VariablesCmd) Run(opts boshopts.VariablesOpts) error {
 
 	if opts.Type != "" {
 		if opts.Type == "certificate" {

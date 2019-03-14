@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -14,7 +15,7 @@ func NewStartCmd(ui boshui.UI, deployment boshdir.Deployment) StartCmd {
 	return StartCmd{ui: ui, deployment: deployment}
 }
 
-func (c StartCmd) Run(opts StartOpts) error {
+func (c StartCmd) Run(opts boshopts.StartOpts) error {
 	err := c.ui.AskForConfirmation()
 	if err != nil {
 		return err

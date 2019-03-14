@@ -5,6 +5,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 
 	"errors"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
@@ -24,11 +25,11 @@ var _ = Describe("IgnoreCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts IgnoreOpts
+			opts boshopts.IgnoreOpts
 		)
 
 		BeforeEach(func() {
-			opts = IgnoreOpts{}
+			opts = boshopts.IgnoreOpts{}
 		})
 
 		act := func() error {

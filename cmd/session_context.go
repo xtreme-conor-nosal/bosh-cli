@@ -4,18 +4,19 @@ import (
 	boshsys "github.com/cloudfoundry/bosh-utils/system"
 
 	cmdconf "github.com/cloudfoundry/bosh-cli/cmd/config"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 )
 
 // SessionContextImpl prefers options over config values
 type SessionContextImpl struct {
-	opts   BoshOpts
+	opts   boshopts.BoshOpts
 	config cmdconf.Config
 
 	fs boshsys.FileSystem
 }
 
 func NewSessionContextImpl(
-	opts BoshOpts,
+	opts boshopts.BoshOpts,
 	config cmdconf.Config,
 	fs boshsys.FileSystem,
 ) *SessionContextImpl {

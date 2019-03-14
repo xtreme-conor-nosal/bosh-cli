@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 )
 
@@ -12,6 +13,6 @@ func NewUpdateResurrectionCmd(director boshdir.Director) UpdateResurrectionCmd {
 	return UpdateResurrectionCmd{director: director}
 }
 
-func (c UpdateResurrectionCmd) Run(opts UpdateResurrectionOpts) error {
+func (c UpdateResurrectionCmd) Run(opts boshopts.UpdateResurrectionOpts) error {
 	return c.director.EnableResurrection(bool(opts.Args.Enabled))
 }

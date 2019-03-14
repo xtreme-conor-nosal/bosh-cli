@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	biui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -21,7 +22,7 @@ func NewInspectStemcellTarballCmd(
 	}
 }
 
-func (c InspectStemcellTarballCmd) Run(opts InspectStemcellTarballOpts) error {
+func (c InspectStemcellTarballCmd) Run(opts boshopts.InspectStemcellTarballOpts) error {
 	archive := c.stemcellArchiveFactory(opts.Args.PathToStemcell)
 	metadata, err := archive.Info()
 	if err != nil {

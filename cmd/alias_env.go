@@ -2,6 +2,7 @@ package cmd
 
 import (
 	cmdconf "github.com/cloudfoundry/bosh-cli/cmd/config"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
 
@@ -20,7 +21,7 @@ func NewAliasEnvCmd(
 	return AliasEnvCmd{sessionFactory: sessionFactory, config: config, ui: ui}
 }
 
-func (c AliasEnvCmd) Run(opts AliasEnvOpts) error {
+func (c AliasEnvCmd) Run(opts boshopts.AliasEnvOpts) error {
 	updatedConfig, err := c.config.AliasEnvironment(opts.URL, opts.Args.Alias, opts.CACert.Content)
 	if err != nil {
 		return err

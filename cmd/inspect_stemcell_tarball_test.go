@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -21,7 +22,7 @@ var _ = Describe("InspectStemcellTarballCmd", func() {
 			archive          *fakedir.FakeStemcellArchive
 			command          InspectStemcellTarballCmd
 			ui               *fakeui.FakeUI
-			opts             InspectStemcellTarballOpts
+			opts             boshopts.InspectStemcellTarballOpts
 			stemcellMetadata boshdir.StemcellMetadata
 		)
 
@@ -46,7 +47,7 @@ var _ = Describe("InspectStemcellTarballCmd", func() {
 				return archive
 			}
 
-			opts = InspectStemcellTarballOpts{}
+			opts = boshopts.InspectStemcellTarballOpts{}
 			ui = &fakeui.FakeUI{}
 
 			command = NewInspectStemcellTarballCmd(stemcellArchiveFactory, ui)

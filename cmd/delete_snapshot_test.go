@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
 )
@@ -26,12 +27,12 @@ var _ = Describe("DeleteSnapshotCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts DeleteSnapshotOpts
+			opts boshopts.DeleteSnapshotOpts
 		)
 
 		BeforeEach(func() {
-			opts = DeleteSnapshotOpts{
-				Args: DeleteSnapshotArgs{CID: "some-cid"},
+			opts = boshopts.DeleteSnapshotOpts{
+				Args: boshopts.DeleteSnapshotArgs{CID: "some-cid"},
 			}
 		})
 

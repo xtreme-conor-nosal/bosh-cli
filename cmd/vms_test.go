@@ -9,6 +9,7 @@ import (
 	"time"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -31,12 +32,12 @@ var _ = Describe("VMsCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts  VMsOpts
+			opts  boshopts.VMsOpts
 			infos []boshdir.VMInfo
 		)
 
 		BeforeEach(func() {
-			opts = VMsOpts{}
+			opts = boshopts.VMsOpts{}
 		})
 
 		act := func() error { return command.Run(opts) }

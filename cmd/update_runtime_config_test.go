@@ -9,6 +9,7 @@ import (
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
 	fakecmd "github.com/cloudfoundry/bosh-cli/cmd/cmdfakes"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
@@ -34,13 +35,13 @@ var _ = Describe("UpdateRuntimeConfigCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts UpdateRuntimeConfigOpts
+			opts boshopts.UpdateRuntimeConfigOpts
 		)
 
 		BeforeEach(func() {
-			opts = UpdateRuntimeConfigOpts{
-				Args: UpdateRuntimeConfigArgs{
-					RuntimeConfig: FileBytesArg{Bytes: []byte("runtime: config")},
+			opts = boshopts.UpdateRuntimeConfigOpts{
+				Args: boshopts.UpdateRuntimeConfigArgs{
+					RuntimeConfig: boshopts.FileBytesArg{Bytes: []byte("runtime: config")},
 				},
 				Name: "angry-smurf",
 			}
@@ -60,7 +61,7 @@ var _ = Describe("UpdateRuntimeConfigCmd", func() {
 		})
 
 		It("updates templated runtime config", func() {
-			opts.Args.RuntimeConfig = FileBytesArg{
+			opts.Args.RuntimeConfig = boshopts.FileBytesArg{
 				Bytes: []byte("name1: ((name1))\nname2: ((name2))"),
 			}
 
@@ -73,7 +74,7 @@ var _ = Describe("UpdateRuntimeConfigCmd", func() {
 				{Vars: boshtpl.StaticVariables(map[string]interface{}{"name2": "val2-from-file"})},
 			}
 
-			opts.OpsFiles = []OpsFileArg{
+			opts.OpsFiles = []boshopts.OpsFileArg{
 				{
 					Ops: patch.Ops([]patch.Op{
 						patch.ReplaceOp{Path: patch.MustNewPointerFromString("/xyz?"), Value: "val"},
@@ -92,7 +93,7 @@ var _ = Describe("UpdateRuntimeConfigCmd", func() {
 		})
 
 		It("uploads releases provided in the manifest after manifest has been interpolated", func() {
-			opts.Args.RuntimeConfig = FileBytesArg{
+			opts.Args.RuntimeConfig = boshopts.FileBytesArg{
 				Bytes: []byte("before-upload-config: ((key))"),
 			}
 
@@ -116,7 +117,7 @@ var _ = Describe("UpdateRuntimeConfigCmd", func() {
 		})
 
 		It("returns error and does not deploy if uploading releases fails", func() {
-			opts.Args.RuntimeConfig = FileBytesArg{
+			opts.Args.RuntimeConfig = boshopts.FileBytesArg{
 				Bytes: []byte(`
 releases:
 - name: capi
@@ -179,9 +180,9 @@ releases:
 
 		Context("when NoRedact option is passed", func() {
 			BeforeEach(func() {
-				opts = UpdateRuntimeConfigOpts{
-					Args: UpdateRuntimeConfigArgs{
-						RuntimeConfig: FileBytesArg{Bytes: []byte("runtime: config")},
+				opts = boshopts.UpdateRuntimeConfigOpts{
+					Args: boshopts.UpdateRuntimeConfigArgs{
+						RuntimeConfig: boshopts.FileBytesArg{Bytes: []byte("runtime: config")},
 					},
 					Name:     "angry-smurf",
 					NoRedact: true,

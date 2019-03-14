@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -29,11 +30,11 @@ var _ = Describe("DisksCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts DisksOpts
+			opts boshopts.DisksOpts
 		)
 
 		BeforeEach(func() {
-			opts = DisksOpts{}
+			opts = boshopts.DisksOpts{}
 		})
 
 		act := func() error { return command.Run(opts) }

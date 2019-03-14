@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -27,13 +28,13 @@ var _ = Describe("DeleteStemcellCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts     DeleteStemcellOpts
+			opts     boshopts.DeleteStemcellOpts
 			stemcell *fakedir.FakeStemcell
 		)
 
 		BeforeEach(func() {
-			opts = DeleteStemcellOpts{
-				Args: DeleteStemcellArgs{
+			opts = boshopts.DeleteStemcellOpts{
+				Args: boshopts.DeleteStemcellArgs{
 					Slug: boshdir.NewStemcellSlug("some-name", "some-version"),
 				},
 			}

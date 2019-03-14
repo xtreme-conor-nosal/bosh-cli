@@ -1,6 +1,9 @@
 package cmd
 
-import cmdconf "github.com/cloudfoundry/bosh-cli/cmd/config"
+import (
+	cmdconf "github.com/cloudfoundry/bosh-cli/cmd/config"
+	cmdopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
+)
 
 type UnaliasEnvCmd struct {
 	config cmdconf.Config
@@ -10,7 +13,7 @@ func NewUnaliasEnvCmd(config cmdconf.Config) *UnaliasEnvCmd {
 	return &UnaliasEnvCmd{config: config}
 }
 
-func (c UnaliasEnvCmd) Run(opts UnaliasEnvOpts) error {
+func (c UnaliasEnvCmd) Run(opts cmdopts.UnaliasEnvOpts) error {
 	updatedConfig, err := c.config.UnaliasEnvironment(opts.Args.Alias)
 	if err != nil {
 		return err

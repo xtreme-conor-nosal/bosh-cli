@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	boshssh "github.com/cloudfoundry/bosh-cli/ssh"
@@ -37,12 +38,12 @@ var _ = Describe("SCPCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts SCPOpts
+			opts boshopts.SCPOpts
 		)
 
 		BeforeEach(func() {
-			opts = SCPOpts{
-				GatewayFlags: GatewayFlags{
+			opts = boshopts.SCPOpts{
+				GatewayFlags: boshopts.GatewayFlags{
 					UUIDGen: uuidGen,
 				},
 			}

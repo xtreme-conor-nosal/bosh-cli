@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -14,7 +15,7 @@ func NewEnvironmentCmd(ui boshui.UI, director boshdir.Director) EnvironmentCmd {
 	return EnvironmentCmd{ui: ui, director: director}
 }
 
-func (c EnvironmentCmd) Run(opts EnvironmentOpts) error {
+func (c EnvironmentCmd) Run(opts boshopts.EnvironmentOpts) error {
 	info, err := c.director.Info()
 	if err != nil {
 		return err

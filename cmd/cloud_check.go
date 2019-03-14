@@ -3,6 +3,7 @@ package cmd
 import (
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -17,7 +18,7 @@ func NewCloudCheckCmd(deployment boshdir.Deployment, ui boshui.UI) CloudCheckCmd
 	return CloudCheckCmd{deployment: deployment, ui: ui}
 }
 
-func (c CloudCheckCmd) Run(opts CloudCheckOpts) error {
+func (c CloudCheckCmd) Run(opts boshopts.CloudCheckOpts) error {
 	probs, err := c.deployment.ScanForProblems()
 	if err != nil {
 		return err

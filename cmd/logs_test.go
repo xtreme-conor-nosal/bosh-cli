@@ -9,6 +9,7 @@ import (
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
 	fakecmd "github.com/cloudfoundry/bosh-cli/cmd/cmdfakes"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	boshssh "github.com/cloudfoundry/bosh-cli/ssh"
@@ -40,16 +41,16 @@ var _ = Describe("LogsCmd", func() {
 	Describe("Run", func() {
 
 		var (
-			opts LogsOpts
+			opts boshopts.LogsOpts
 		)
 
 		BeforeEach(func() {
-			opts = LogsOpts{
-				Args: AllOrInstanceGroupOrInstanceSlugArgs{
+			opts = boshopts.LogsOpts{
+				Args: boshopts.AllOrInstanceGroupOrInstanceSlugArgs{
 					Slug: boshdir.NewAllOrInstanceGroupOrInstanceSlug("job", "index"),
 				},
 
-				Directory: DirOrCWDArg{Path: "/fake-dir"},
+				Directory: boshopts.DirOrCWDArg{Path: "/fake-dir"},
 			}
 		})
 

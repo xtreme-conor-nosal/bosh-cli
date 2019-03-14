@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
 )
@@ -26,12 +27,12 @@ var _ = Describe("DeleteDiskCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts DeleteDiskOpts
+			opts boshopts.DeleteDiskOpts
 		)
 
 		BeforeEach(func() {
-			opts = DeleteDiskOpts{
-				Args: DeleteDiskArgs{CID: "disk-cid"},
+			opts = boshopts.DeleteDiskOpts{
+				Args: boshopts.DeleteDiskArgs{CID: "disk-cid"},
 			}
 		})
 

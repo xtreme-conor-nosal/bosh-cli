@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshrel "github.com/cloudfoundry/bosh-cli/release"
 	fakerel "github.com/cloudfoundry/bosh-cli/release/releasefakes"
 	boshreldir "github.com/cloudfoundry/bosh-cli/releasedir"
@@ -31,8 +32,8 @@ var _ = Describe("CreateReleaseCmd", func() {
 		releaseReader = &fakerel.FakeReader{}
 		releaseDir = &fakereldir.FakeReleaseDir{}
 
-		releaseDirFactory := func(dir DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir) {
-			Expect(dir).To(Equal(DirOrCWDArg{Path: "/dir"}))
+		releaseDirFactory := func(dir boshopts.DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir) {
+			Expect(dir).To(Equal(boshopts.DirOrCWDArg{Path: "/dir"}))
 			return releaseReader, releaseDir
 		}
 
@@ -44,13 +45,13 @@ var _ = Describe("CreateReleaseCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts    CreateReleaseOpts
+			opts    boshopts.CreateReleaseOpts
 			release *fakerel.FakeRelease
 		)
 
 		BeforeEach(func() {
-			opts = CreateReleaseOpts{
-				Directory: DirOrCWDArg{Path: "/dir"},
+			opts = boshopts.CreateReleaseOpts{
+				Directory: boshopts.DirOrCWDArg{Path: "/dir"},
 			}
 
 			release = &fakerel.FakeRelease{
@@ -70,7 +71,7 @@ var _ = Describe("CreateReleaseCmd", func() {
 
 		Context("when manifest path is provided", func() {
 			BeforeEach(func() {
-				opts.Args.Manifest = FileBytesWithPathArg{Path: "/manifest-path"}
+				opts.Args.Manifest = boshopts.FileBytesWithPathArg{Path: "/manifest-path"}
 
 				releaseReader.ReadStub = func(path string) (boshrel.Release, error) {
 					Expect(path).To(Equal("/manifest-path"))
@@ -110,7 +111,7 @@ var _ = Describe("CreateReleaseCmd", func() {
 
 			Context("with tarball", func() {
 				BeforeEach(func() {
-					opts.Tarball = FileArg{ExpandedPath: "/tarball-destination.tgz"}
+					opts.Tarball = boshopts.FileArg{ExpandedPath: "/tarball-destination.tgz"}
 				})
 
 				It("builds release and release archive based on manifest path", func() {
@@ -151,7 +152,7 @@ var _ = Describe("CreateReleaseCmd", func() {
 				})
 
 				It("interpolates release archive destionation path with ((name)) and ((version))", func() {
-					opts.Tarball = FileArg{ExpandedPath: "/tarball-destination-((name))-((version)).tgz"}
+					opts.Tarball = boshopts.FileArg{ExpandedPath: "/tarball-destination-((name))-((version)).tgz"}
 
 					fakeWriter.WriteStub = func(rel boshrel.Release, skipPkgs []string) (string, error) {
 						Expect(rel).To(Equal(release))
@@ -251,7 +252,7 @@ var _ = Describe("CreateReleaseCmd", func() {
 
 			It("builds release with custom release name and version", func() {
 				opts.Name = "custom-name"
-				opts.Version = VersionArg(semver.MustNewVersionFromString("custom-ver"))
+				opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("custom-ver"))
 
 				releaseDir.DefaultNameReturns("default-rel-name", nil)
 				releaseDir.NextDevVersionReturns(semver.MustNewVersionFromString("1.1"), nil)
@@ -366,7 +367,7 @@ var _ = Describe("CreateReleaseCmd", func() {
 
 			It("builds and then finalizes release with custom version", func() {
 				opts.Final = true
-				opts.Version = VersionArg(semver.MustNewVersionFromString("custom-ver"))
+				opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("custom-ver"))
 
 				releaseDir.DefaultNameReturns("default-rel-name", nil)
 				releaseDir.NextDevVersionReturns(semver.MustNewVersionFromString("1.1"), nil)
@@ -408,7 +409,7 @@ var _ = Describe("CreateReleaseCmd", func() {
 
 			It("builds release and archive if building archive is requested", func() {
 				opts.Final = true
-				opts.Tarball = FileArg{ExpandedPath: "/archive-path"}
+				opts.Tarball = boshopts.FileArg{ExpandedPath: "/archive-path"}
 
 				releaseDir.DefaultNameReturns("default-rel-name", nil)
 				releaseDir.NextDevVersionReturns(semver.MustNewVersionFromString("next-dev+ver"), nil)
@@ -483,7 +484,7 @@ var _ = Describe("CreateReleaseCmd", func() {
 			})
 
 			It("returns error if building release archive fails", func() {
-				opts.Tarball = FileArg{ExpandedPath: "/tarball/dest/path.tgz"}
+				opts.Tarball = boshopts.FileArg{ExpandedPath: "/tarball/dest/path.tgz"}
 
 				fakeWriter.WriteStub = func(rel boshrel.Release, skipPkgs []string) (string, error) {
 					return "", errors.New("fake-err")

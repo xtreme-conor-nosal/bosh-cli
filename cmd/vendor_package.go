@@ -5,23 +5,24 @@ import (
 
 	semver "github.com/cppforlife/go-semi-semantic/version"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshreldir "github.com/cloudfoundry/bosh-cli/releasedir"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
 
 type VendorPackageCmd struct {
-	releaseDirFactory func(DirOrCWDArg) boshreldir.ReleaseDir
+	releaseDirFactory func(boshopts.DirOrCWDArg) boshreldir.ReleaseDir
 	ui                boshui.UI
 }
 
 func NewVendorPackageCmd(
-	releaseDirFactory func(DirOrCWDArg) boshreldir.ReleaseDir,
+	releaseDirFactory func(boshopts.DirOrCWDArg) boshreldir.ReleaseDir,
 	ui boshui.UI,
 ) VendorPackageCmd {
 	return VendorPackageCmd{releaseDirFactory, ui}
 }
 
-func (c VendorPackageCmd) Run(opts VendorPackageOpts) error {
+func (c VendorPackageCmd) Run(opts boshopts.VendorPackageOpts) error {
 	srcReleaseDir := c.releaseDirFactory(opts.Args.URL)
 	dstReleaseDir := c.releaseDirFactory(opts.Directory)
 

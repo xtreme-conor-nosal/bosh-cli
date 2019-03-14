@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	boshssh "github.com/cloudfoundry/bosh-cli/ssh"
@@ -42,16 +43,16 @@ var _ = Describe("SSHCmd", func() {
 		const ExpUsername = "bosh_8c5ff117957245c"
 
 		var (
-			opts SSHOpts
+			opts boshopts.SSHOpts
 		)
 
 		BeforeEach(func() {
-			opts = SSHOpts{
-				Args: AllOrInstanceGroupOrInstanceSlugArgs{
+			opts = boshopts.SSHOpts{
+				Args: boshopts.AllOrInstanceGroupOrInstanceSlugArgs{
 					Slug: boshdir.NewAllOrInstanceGroupOrInstanceSlug("job-name", ""),
 				},
 
-				GatewayFlags: GatewayFlags{
+				GatewayFlags: boshopts.GatewayFlags{
 					UUIDGen: uuidGen,
 				},
 			}
@@ -112,7 +113,7 @@ var _ = Describe("SSHCmd", func() {
 					result := boshdir.SSHResult{Hosts: []boshdir.Host{{Host: "ip1"}}}
 					deployment.SetUpSSHReturns(result, nil)
 
-					opts.RawOpts = TrimmedSpaceArgs([]string{"raw1", "raw2"})
+					opts.RawOpts = boshopts.TrimmedSpaceArgs([]string{"raw1", "raw2"})
 					opts.GatewayFlags.Disable = true
 					opts.GatewayFlags.Username = "gw-username"
 					opts.GatewayFlags.Host = "gw-host"
@@ -191,7 +192,7 @@ var _ = Describe("SSHCmd", func() {
 					result := boshdir.SSHResult{Hosts: []boshdir.Host{{Host: "ip1"}}}
 					deployment.SetUpSSHReturns(result, nil)
 
-					opts.RawOpts = TrimmedSpaceArgs([]string{"raw1", "raw2"})
+					opts.RawOpts = boshopts.TrimmedSpaceArgs([]string{"raw1", "raw2"})
 					opts.GatewayFlags.Disable = true
 					opts.GatewayFlags.Username = "gw-username"
 					opts.GatewayFlags.Host = "gw-host"

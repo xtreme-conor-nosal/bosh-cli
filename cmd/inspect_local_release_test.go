@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 
 	. "github.com/cloudfoundry/bosh-cli/release/resource"
 
@@ -24,7 +25,7 @@ var _ = Describe("InspectLocalReleaseCmd", func() {
 			fakeRelease   *fakerel.FakeRelease
 			releaseReader *fakerel.FakeReader
 			ui            *fakeui.FakeUI
-			opts          InspectLocalReleaseOpts
+			opts          boshopts.InspectLocalReleaseOpts
 			command       InspectLocalReleaseCmd
 		)
 
@@ -75,8 +76,8 @@ var _ = Describe("InspectLocalReleaseCmd", func() {
 			releaseReader = &fakerel.FakeReader{}
 			releaseReader.ReadReturns(fakeRelease, nil)
 
-			opts = InspectLocalReleaseOpts{
-				Args: InspectLocalReleaseArgs{
+			opts = boshopts.InspectLocalReleaseOpts{
+				Args: boshopts.InspectLocalReleaseArgs{
 					PathToRelease: "/some/release.tgz",
 				},
 			}

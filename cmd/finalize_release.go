@@ -3,6 +3,7 @@ package cmd
 import (
 	semver "github.com/cppforlife/go-semi-semantic/version"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshrel "github.com/cloudfoundry/bosh-cli/release"
 	boshreldir "github.com/cloudfoundry/bosh-cli/releasedir"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
@@ -26,7 +27,7 @@ func NewFinalizeReleaseCmd(
 	}
 }
 
-func (c FinalizeReleaseCmd) Run(opts FinalizeReleaseOpts) error {
+func (c FinalizeReleaseCmd) Run(opts boshopts.FinalizeReleaseOpts) error {
 	release, err := c.releaseReader.Read(opts.Args.Path)
 	if err != nil {
 		return err

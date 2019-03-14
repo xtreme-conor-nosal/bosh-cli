@@ -8,6 +8,7 @@ import (
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
 	fakecmd "github.com/cloudfoundry/bosh-cli/cmd/cmdfakes"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 )
@@ -27,17 +28,17 @@ var _ = Describe("ExportReleaseCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts ExportReleaseOpts
+			opts boshopts.ExportReleaseOpts
 		)
 
 		BeforeEach(func() {
-			opts = ExportReleaseOpts{
-				Args: ExportReleaseArgs{
+			opts = boshopts.ExportReleaseOpts{
+				Args: boshopts.ExportReleaseArgs{
 					ReleaseSlug:   boshdir.NewReleaseSlug("rel", "rel-ver"),
 					OSVersionSlug: boshdir.NewOSVersionSlug("os", "os-ver"),
 				},
 
-				Directory: DirOrCWDArg{Path: "/fake-dir"},
+				Directory: boshopts.DirOrCWDArg{Path: "/fake-dir"},
 				Jobs:      []string{"fake-job"},
 			}
 		})

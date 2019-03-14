@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
@@ -29,13 +30,13 @@ var _ = Describe("UpdateCloudConfigCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts UpdateCloudConfigOpts
+			opts boshopts.UpdateCloudConfigOpts
 		)
 
 		BeforeEach(func() {
-			opts = UpdateCloudConfigOpts{
-				Args: UpdateCloudConfigArgs{
-					CloudConfig: FileBytesArg{Bytes: []byte("cloud-config")},
+			opts = boshopts.UpdateCloudConfigOpts{
+				Args: boshopts.UpdateCloudConfigArgs{
+					CloudConfig: boshopts.FileBytesArg{Bytes: []byte("cloud-config")},
 				},
 			}
 		})
@@ -53,7 +54,7 @@ var _ = Describe("UpdateCloudConfigCmd", func() {
 		})
 
 		It("updates templated cloud config", func() {
-			opts.Args.CloudConfig = FileBytesArg{
+			opts.Args.CloudConfig = boshopts.FileBytesArg{
 				Bytes: []byte("name1: ((name1))\nname2: ((name2))"),
 			}
 
@@ -66,7 +67,7 @@ var _ = Describe("UpdateCloudConfigCmd", func() {
 				{Vars: boshtpl.StaticVariables(map[string]interface{}{"name2": "val2-from-file"})},
 			}
 
-			opts.OpsFiles = []OpsFileArg{
+			opts.OpsFiles = []boshopts.OpsFileArg{
 				{
 					Ops: patch.Ops([]patch.Op{
 						patch.ReplaceOp{Path: patch.MustNewPointerFromString("/xyz?"), Value: "val"},

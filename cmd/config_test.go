@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -28,7 +29,7 @@ var _ = Describe("ConfigCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts ConfigOpts
+			opts boshopts.ConfigOpts
 		)
 
 		act := func() error { return command.Run(opts) }
@@ -36,7 +37,7 @@ var _ = Describe("ConfigCmd", func() {
 		Context("when neither ID nor options are given", func() {
 
 			BeforeEach(func() {
-				opts = ConfigOpts{}
+				opts = boshopts.ConfigOpts{}
 			})
 
 			It("returns an error", func() {
@@ -49,8 +50,8 @@ var _ = Describe("ConfigCmd", func() {
 		Context("when only ID is given", func() {
 
 			BeforeEach(func() {
-				opts = ConfigOpts{
-					Args: ConfigArgs{ID: "123"},
+				opts = boshopts.ConfigOpts{
+					Args: boshopts.ConfigArgs{ID: "123"},
 				}
 			})
 
@@ -106,8 +107,8 @@ var _ = Describe("ConfigCmd", func() {
 		Context("when ID and type option is given", func() {
 
 			BeforeEach(func() {
-				opts = ConfigOpts{
-					Args: ConfigArgs{ID: "123"},
+				opts = boshopts.ConfigOpts{
+					Args: boshopts.ConfigArgs{ID: "123"},
 					Type: "my-type",
 				}
 			})
@@ -121,8 +122,8 @@ var _ = Describe("ConfigCmd", func() {
 
 		Context("when ID and name option is given", func() {
 			BeforeEach(func() {
-				opts = ConfigOpts{
-					Args: ConfigArgs{ID: "123"},
+				opts = boshopts.ConfigOpts{
+					Args: boshopts.ConfigArgs{ID: "123"},
 					Name: "my-name",
 				}
 			})
@@ -136,7 +137,7 @@ var _ = Describe("ConfigCmd", func() {
 
 		Context("when only the name option is given", func() {
 			BeforeEach(func() {
-				opts = ConfigOpts{
+				opts = boshopts.ConfigOpts{
 					Name: "my-name",
 				}
 			})
@@ -150,7 +151,7 @@ var _ = Describe("ConfigCmd", func() {
 
 		Context("when only the type option is given", func() {
 			BeforeEach(func() {
-				opts = ConfigOpts{
+				opts = boshopts.ConfigOpts{
 					Type: "my-type",
 				}
 			})
@@ -165,7 +166,7 @@ var _ = Describe("ConfigCmd", func() {
 		Context("when ID is not given and both options are given", func() {
 
 			BeforeEach(func() {
-				opts = ConfigOpts{
+				opts = boshopts.ConfigOpts{
 					Type: "my-type",
 					Name: "my-name",
 				}

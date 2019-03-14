@@ -5,6 +5,7 @@ import (
 
 	"github.com/cloudfoundry/bosh-cli/cmd"
 	"github.com/cloudfoundry/bosh-cli/cmd/config/configfakes"
+	cmdopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -13,13 +14,13 @@ var _ = Describe("UnaliasEnvCmd", func() {
 	var (
 		config  *configfakes.FakeConfig
 		command *cmd.UnaliasEnvCmd
-		opts    cmd.UnaliasEnvOpts
+		opts    cmdopts.UnaliasEnvOpts
 	)
 
 	BeforeEach(func() {
 		config = &configfakes.FakeConfig{}
 		command = cmd.NewUnaliasEnvCmd(config)
-		opts = cmd.UnaliasEnvOpts{Args: cmd.UnaliasEnvArgs{Alias: "foo"}}
+		opts = cmdopts.UnaliasEnvOpts{Args: cmdopts.UnaliasEnvArgs{Alias: "foo"}}
 	})
 
 	Describe("Run", func() {

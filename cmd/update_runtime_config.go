@@ -3,6 +3,7 @@ package cmd
 import (
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
@@ -18,7 +19,7 @@ func NewUpdateRuntimeConfigCmd(ui boshui.UI, director boshdir.Director, releaseU
 	return UpdateRuntimeConfigCmd{ui: ui, director: director, releaseUploader: releaseUploader}
 }
 
-func (c UpdateRuntimeConfigCmd) Run(opts UpdateRuntimeConfigOpts) error {
+func (c UpdateRuntimeConfigCmd) Run(opts boshopts.UpdateRuntimeConfigOpts) error {
 	tpl := boshtpl.NewTemplate(opts.Args.RuntimeConfig.Bytes)
 
 	bytes, err := tpl.Evaluate(opts.VarFlags.AsVariables(), opts.OpsFlags.AsOp(), boshtpl.EvaluateOpts{})

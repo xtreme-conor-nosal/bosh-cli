@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshreldir "github.com/cloudfoundry/bosh-cli/releasedir"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
@@ -19,7 +20,7 @@ func NewAddBlobCmd(blobsDir boshreldir.BlobsDir, fs boshsys.FileSystem, ui boshu
 	return AddBlobCmd{blobsDir: blobsDir, fs: fs, ui: ui}
 }
 
-func (c AddBlobCmd) Run(opts AddBlobOpts) error {
+func (c AddBlobCmd) Run(opts boshopts.AddBlobOpts) error {
 	file, err := c.fs.OpenFile(opts.Args.Path, os.O_RDONLY, 0)
 	if err != nil {
 		return bosherr.WrapErrorf(err, "Opening blob")

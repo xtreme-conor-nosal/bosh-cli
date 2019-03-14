@@ -10,6 +10,7 @@ import (
 	fakecmd "github.com/cloudfoundry/bosh-cli/cmd/cmdfakes"
 	cmdconf "github.com/cloudfoundry/bosh-cli/cmd/config"
 	fakecmdconf "github.com/cloudfoundry/bosh-cli/cmd/config/configfakes"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -56,18 +57,18 @@ var _ = Describe("AliasEnvCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts            AliasEnvOpts
+			opts            boshopts.AliasEnvOpts
 			updatedSession  *fakecmd.FakeSession
 			updatedConfig   *fakecmdconf.FakeConfig2
 			updatedDirector *fakedir.FakeDirector
 		)
 
 		BeforeEach(func() {
-			opts = AliasEnvOpts{}
+			opts = boshopts.AliasEnvOpts{}
 
 			opts.URL = "environment-url"
 			opts.Args.Alias = "environment-alias"
-			opts.CACert = CACertArg{Content: "environment-ca-cert"}
+			opts.CACert = boshopts.CACertArg{Content: "environment-ca-cert"}
 
 			updatedConfig = &fakecmdconf.FakeConfig2{
 				Existing: fakecmdconf.ConfigContents{

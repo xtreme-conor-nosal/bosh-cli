@@ -6,6 +6,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
 )
@@ -23,17 +24,17 @@ var _ = Describe("InterpolateCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts InterpolateOpts
+			opts boshopts.InterpolateOpts
 		)
 
 		BeforeEach(func() {
-			opts = InterpolateOpts{}
+			opts = boshopts.InterpolateOpts{}
 		})
 
 		act := func() error { return command.Run(opts) }
 
 		It("shows templated manifest", func() {
-			opts.Args.Manifest = FileBytesArg{
+			opts.Args.Manifest = boshopts.FileBytesArg{
 				Bytes: []byte("name1: ((name1))\nname2: ((name2))"),
 			}
 
@@ -46,7 +47,7 @@ var _ = Describe("InterpolateCmd", func() {
 				{Vars: boshtpl.StaticVariables(map[string]interface{}{"name2": "val2-from-file"})},
 			}
 
-			opts.OpsFiles = []OpsFileArg{
+			opts.OpsFiles = []boshopts.OpsFileArg{
 				{
 					Ops: patch.Ops([]patch.Op{
 						patch.ReplaceOp{Path: patch.MustNewPointerFromString("/xyz?"), Value: "val"},
@@ -62,7 +63,7 @@ var _ = Describe("InterpolateCmd", func() {
 		})
 
 		It("returns portion of the template after it's interpolated if path is given", func() {
-			opts.Args.Manifest = FileBytesArg{
+			opts.Args.Manifest = boshopts.FileBytesArg{
 				Bytes: []byte("name1: ((name1))\nname2: ((name2))"),
 			}
 
@@ -78,7 +79,7 @@ var _ = Describe("InterpolateCmd", func() {
 				},
 			}
 
-			opts.OpsFiles = []OpsFileArg{
+			opts.OpsFiles = []boshopts.OpsFileArg{
 				{
 					Ops: patch.Ops([]patch.Op{
 						patch.ReplaceOp{Path: patch.MustNewPointerFromString("/name2"), Value: "((var))"},
@@ -94,7 +95,7 @@ var _ = Describe("InterpolateCmd", func() {
 		})
 
 		It("returns portion of the template formatting multiline string without YAML indent", func() {
-			opts.Args.Manifest = FileBytesArg{
+			opts.Args.Manifest = boshopts.FileBytesArg{
 				Bytes: []byte(`key: "line1\nline2"`),
 			}
 
@@ -106,7 +107,7 @@ var _ = Describe("InterpolateCmd", func() {
 		})
 
 		It("returns portion of the template formatting result as regular YAML", func() {
-			opts.Args.Manifest = FileBytesArg{
+			opts.Args.Manifest = boshopts.FileBytesArg{
 				Bytes: []byte("key:\n  subkey:\n    subsubkey: key"),
 			}
 
@@ -118,7 +119,7 @@ var _ = Describe("InterpolateCmd", func() {
 		})
 
 		It("returns error if variables are not found in templated manifest if var-errs flag is set", func() {
-			opts.Args.Manifest = FileBytesArg{
+			opts.Args.Manifest = boshopts.FileBytesArg{
 				Bytes: []byte("name1: ((name1))\nname2: ((name2))"),
 			}
 
@@ -134,7 +135,7 @@ var _ = Describe("InterpolateCmd", func() {
 		})
 
 		It("returns error if variables are not used in templated manifest if var-errs-unused flag is set", func() {
-			opts.Args.Manifest = FileBytesArg{
+			opts.Args.Manifest = boshopts.FileBytesArg{
 				Bytes: []byte("name1: ((name1))\nname2: ((name2))"),
 			}
 

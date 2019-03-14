@@ -8,20 +8,21 @@ import (
 	boshsys "github.com/cloudfoundry/bosh-utils/system"
 	semver "github.com/cppforlife/go-semi-semantic/version"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshrel "github.com/cloudfoundry/bosh-cli/release"
 	boshreldir "github.com/cloudfoundry/bosh-cli/releasedir"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
 
 type CreateReleaseCmd struct {
-	releaseDirFactory func(DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir)
+	releaseDirFactory func(boshopts.DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir)
 	releaseWriter     boshrel.Writer
 	fs                boshsys.FileSystem
 	ui                boshui.UI
 }
 
 func NewCreateReleaseCmd(
-	releaseDirFactory func(DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir),
+	releaseDirFactory func(boshopts.DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir),
 	releaseWriter boshrel.Writer,
 	fs boshsys.FileSystem,
 	ui boshui.UI,
@@ -29,7 +30,7 @@ func NewCreateReleaseCmd(
 	return CreateReleaseCmd{releaseDirFactory, releaseWriter, fs, ui}
 }
 
-func (c CreateReleaseCmd) Run(opts CreateReleaseOpts) (boshrel.Release, error) {
+func (c CreateReleaseCmd) Run(opts boshopts.CreateReleaseOpts) (boshrel.Release, error) {
 	releaseManifestReader, releaseDir := c.releaseDirFactory(opts.Directory)
 	manifestGiven := len(opts.Args.Manifest.Path) > 0
 
@@ -77,7 +78,7 @@ func (c CreateReleaseCmd) Run(opts CreateReleaseOpts) (boshrel.Release, error) {
 	return release, nil
 }
 
-func (c CreateReleaseCmd) buildRelease(releaseDir boshreldir.ReleaseDir, opts CreateReleaseOpts) (boshrel.Release, error) {
+func (c CreateReleaseCmd) buildRelease(releaseDir boshreldir.ReleaseDir, opts boshopts.CreateReleaseOpts) (boshrel.Release, error) {
 	var err error
 
 	name := opts.Name
@@ -101,7 +102,7 @@ func (c CreateReleaseCmd) buildRelease(releaseDir boshreldir.ReleaseDir, opts Cr
 	return releaseDir.BuildRelease(name, version, opts.Force)
 }
 
-func (c CreateReleaseCmd) finalizeRelease(releaseDir boshreldir.ReleaseDir, release boshrel.Release, opts CreateReleaseOpts) error {
+func (c CreateReleaseCmd) finalizeRelease(releaseDir boshreldir.ReleaseDir, release boshrel.Release, opts boshopts.CreateReleaseOpts) error {
 	version := semver.Version(opts.Version)
 
 	if version.Empty() {

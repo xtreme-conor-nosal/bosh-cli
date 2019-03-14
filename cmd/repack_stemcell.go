@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	"github.com/cloudfoundry/bosh-cli/stemcell"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	biproperty "github.com/cloudfoundry/bosh-utils/property"
@@ -22,7 +23,7 @@ func NewRepackStemcellCmd(
 	return RepackStemcellCmd{ui: ui, fs: fs, stemcellExtractor: stemcellExtractor}
 }
 
-func (c RepackStemcellCmd) Run(opts RepackStemcellOpts) error {
+func (c RepackStemcellCmd) Run(opts boshopts.RepackStemcellOpts) error {
 	extractedStemcell, err := c.stemcellExtractor.Extract(opts.Args.PathToStemcell)
 	if err != nil {
 		return err

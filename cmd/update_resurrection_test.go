@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 )
 
@@ -23,17 +24,17 @@ var _ = Describe("UpdateResurrectionCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts UpdateResurrectionOpts
+			opts boshopts.UpdateResurrectionOpts
 		)
 
 		BeforeEach(func() {
-			opts = UpdateResurrectionOpts{}
+			opts = boshopts.UpdateResurrectionOpts{}
 		})
 
 		act := func() error { return command.Run(opts) }
 
 		It("enables resurrection", func() {
-			opts.Args.Enabled = BoolArg(true)
+			opts.Args.Enabled = boshopts.BoolArg(true)
 
 			err := act()
 			Expect(err).ToNot(HaveOccurred())
@@ -43,7 +44,7 @@ var _ = Describe("UpdateResurrectionCmd", func() {
 		})
 
 		It("disables resurrection", func() {
-			opts.Args.Enabled = BoolArg(false)
+			opts.Args.Enabled = boshopts.BoolArg(false)
 
 			err := act()
 			Expect(err).ToNot(HaveOccurred())

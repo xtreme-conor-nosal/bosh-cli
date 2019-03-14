@@ -8,6 +8,7 @@ import (
 
 	"fmt"
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -19,14 +20,14 @@ var _ = Describe("VariablesCmd", func() {
 		ui         *fakeui.FakeUI
 		deployment *fakedir.FakeDeployment
 		command    VariablesCmd
-		opts       VariablesOpts
+		opts       boshopts.VariablesOpts
 	)
 
 	BeforeEach(func() {
 		ui = &fakeui.FakeUI{}
 		deployment = &fakedir.FakeDeployment{}
 		command = NewVariablesCmd(ui, deployment)
-		opts = VariablesOpts{}
+		opts = boshopts.VariablesOpts{}
 	})
 
 	Describe("Run", func() {
@@ -86,7 +87,7 @@ var _ = Describe("VariablesCmd", func() {
 			Context("type is certificate", func() {
 
 				BeforeEach(func() {
-					opts = VariablesOpts{Type: "certificate"}
+					opts = boshopts.VariablesOpts{Type: "certificate"}
 				})
 
 				It("should return only the type specified", func() {
@@ -150,7 +151,7 @@ var _ = Describe("VariablesCmd", func() {
 				unSupportedType := "not-supported-type"
 
 				BeforeEach(func() {
-					opts = VariablesOpts{Type: unSupportedType}
+					opts = boshopts.VariablesOpts{Type: unSupportedType}
 				})
 
 				It("should raise error", func() {

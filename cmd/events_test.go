@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -63,7 +64,7 @@ var _ = Describe("EventsCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts EventsOpts
+			opts boshopts.EventsOpts
 		)
 
 		It("lists events", func() {

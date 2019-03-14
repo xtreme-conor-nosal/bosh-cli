@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -14,7 +15,7 @@ func NewRestartCmd(ui boshui.UI, deployment boshdir.Deployment) RestartCmd {
 	return RestartCmd{ui: ui, deployment: deployment}
 }
 
-func (c RestartCmd) Run(opts RestartOpts) error {
+func (c RestartCmd) Run(opts boshopts.RestartOpts) error {
 	err := c.ui.AskForConfirmation()
 	if err != nil {
 		return err

@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 )
@@ -28,12 +29,12 @@ var _ = Describe("TaskCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts TaskOpts
+			opts boshopts.TaskOpts
 			task *fakedir.FakeTask
 		)
 
 		BeforeEach(func() {
-			opts = TaskOpts{}
+			opts = boshopts.TaskOpts{}
 			task = &fakedir.FakeTask{}
 			director.FindTaskReturns(task, nil)
 		})

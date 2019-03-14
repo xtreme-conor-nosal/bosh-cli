@@ -9,6 +9,8 @@ import (
 
 	// Should only be imported here to avoid leaking use of goflags through project
 	goflags "github.com/jessevdk/go-flags"
+
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 )
 
 type Factory struct {
@@ -22,7 +24,7 @@ func NewFactory(deps BasicDeps) Factory {
 func (f Factory) New(args []string) (Cmd, error) {
 	var cmdOpts interface{}
 
-	boshOpts := &BoshOpts{}
+	boshOpts := &boshopts.BoshOpts{}
 
 	boshOpts.VersionOpt = func() error {
 		return &goflags.Error{
@@ -47,35 +49,35 @@ func (f Factory) New(args []string) (Cmd, error) {
 	}
 
 	parser.CommandHandler = func(command goflags.Commander, extraArgs []string) error {
-		if opts, ok := command.(*SSHOpts); ok {
+		if opts, ok := command.(*boshopts.SSHOpts); ok {
 			if len(opts.Command) == 0 {
 				opts.Command = extraArgs
 				extraArgs = []string{}
 			}
 		}
 
-		if opts, ok := command.(*AliasEnvOpts); ok {
+		if opts, ok := command.(*boshopts.AliasEnvOpts); ok {
 			opts.URL = boshOpts.EnvironmentOpt
 			opts.CACert = boshOpts.CACertOpt
 		}
 
-		if opts, ok := command.(*EventsOpts); ok {
+		if opts, ok := command.(*boshopts.EventsOpts); ok {
 			opts.Deployment = boshOpts.DeploymentOpt
 		}
 
-		if opts, ok := command.(*VMsOpts); ok {
+		if opts, ok := command.(*boshopts.VMsOpts); ok {
 			opts.Deployment = boshOpts.DeploymentOpt
 		}
 
-		if opts, ok := command.(*InstancesOpts); ok {
+		if opts, ok := command.(*boshopts.InstancesOpts); ok {
 			opts.Deployment = boshOpts.DeploymentOpt
 		}
 
-		if opts, ok := command.(*TasksOpts); ok {
+		if opts, ok := command.(*boshopts.TasksOpts); ok {
 			opts.Deployment = boshOpts.DeploymentOpt
 		}
 
-		if opts, ok := command.(*TaskOpts); ok {
+		if opts, ok := command.(*boshopts.TaskOpts); ok {
 			opts.Deployment = boshOpts.DeploymentOpt
 		}
 
@@ -115,13 +117,13 @@ func (f Factory) New(args []string) (Cmd, error) {
 	// --help and --version result in errors; turn them into successful output cmds
 	if typedErr, ok := err.(*goflags.Error); ok {
 		if typedErr.Type == goflags.ErrHelp {
-			cmdOpts = &MessageOpts{Message: typedErr.Message}
+			cmdOpts = &boshopts.MessageOpts{Message: typedErr.Message}
 			err = nil
 		}
 	}
 
-	if _, ok := cmdOpts.(*HelpOpts); ok {
-		cmdOpts = &MessageOpts{Message: helpText.String()}
+	if _, ok := cmdOpts.(*boshopts.HelpOpts); ok {
+		cmdOpts = &boshopts.MessageOpts{Message: helpText.String()}
 	}
 
 	return NewCmd(*boshOpts, cmdOpts, f.deps), err

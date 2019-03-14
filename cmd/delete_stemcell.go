@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -14,7 +15,7 @@ func NewDeleteStemcellCmd(ui boshui.UI, director boshdir.Director) DeleteStemcel
 	return DeleteStemcellCmd{ui: ui, director: director}
 }
 
-func (c DeleteStemcellCmd) Run(opts DeleteStemcellOpts) error {
+func (c DeleteStemcellCmd) Run(opts boshopts.DeleteStemcellOpts) error {
 	err := c.ui.AskForConfirmation()
 	if err != nil {
 		return err

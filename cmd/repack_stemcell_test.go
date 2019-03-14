@@ -15,6 +15,7 @@ import (
 	"path/filepath"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	"github.com/cloudfoundry/bosh-cli/stemcell"
 	"github.com/cloudfoundry/bosh-cli/stemcell/stemcellfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -37,7 +38,7 @@ var _ = Describe("RepackStemcellCmd", func() {
 	Describe("Run", func() {
 		var (
 			extractor       stemcell.Extractor
-			opts            RepackStemcellOpts
+			opts            boshopts.RepackStemcellOpts
 			outputStemcell  string
 			compressor      *FakeCompressor
 			initialManifest stemcell.Manifest
@@ -48,7 +49,7 @@ var _ = Describe("RepackStemcellCmd", func() {
 			reader := stemcell.NewReader(compressor, fs)
 			extractor = stemcell.NewExtractor(reader, fs)
 			command = NewRepackStemcellCmd(ui, fs, extractor)
-			opts = RepackStemcellOpts{}
+			opts = boshopts.RepackStemcellOpts{}
 		})
 
 		act := func() error { return command.Run(opts) }
@@ -72,7 +73,7 @@ var _ = Describe("RepackStemcellCmd", func() {
 				scTempDir, err := fs.TempDir("stemcell-files")
 				Expect(err).ToNot(HaveOccurred())
 				outputStemcell = filepath.Join(scTempDir, "repacked-stemcell.tgz")
-				opts.Args.PathToResult = FileArg{ExpandedPath: outputStemcell}
+				opts.Args.PathToResult = boshopts.FileArg{ExpandedPath: outputStemcell}
 
 				manifestBytes, err := yaml.Marshal(initialManifest)
 				Expect(err).ToNot(HaveOccurred())
@@ -112,7 +113,7 @@ var _ = Describe("RepackStemcellCmd", func() {
 			})
 
 			It("overrides fields with the values from passed flags", func() {
-				opts = RepackStemcellOpts{
+				opts = boshopts.RepackStemcellOpts{
 					Args:            opts.Args,
 					Name:            "other-name",
 					Version:         "2",
@@ -184,9 +185,9 @@ var _ = Describe("RepackStemcellCmd", func() {
 			)
 
 			BeforeEach(func() {
-				opts = RepackStemcellOpts{}
+				opts = boshopts.RepackStemcellOpts{}
 				opts.Args.PathToStemcell = "some-stemcell.tgz"
-				opts.Args.PathToResult = FileArg{ExpandedPath: "repacked-stemcell.tgz"}
+				opts.Args.PathToResult = boshopts.FileArg{ExpandedPath: "repacked-stemcell.tgz"}
 				extractor = stemcellfakes.NewFakeExtractor()
 				extractedStemcell = &stemcellfakes.FakeExtractedStemcell{}
 				command = NewRepackStemcellCmd(ui, fs, extractor)

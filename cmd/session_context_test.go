@@ -8,17 +8,18 @@ import (
 	. "github.com/cloudfoundry/bosh-cli/cmd"
 	cmdconf "github.com/cloudfoundry/bosh-cli/cmd/config"
 	fakeconf "github.com/cloudfoundry/bosh-cli/cmd/config/configfakes"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 )
 
 var _ = Describe("SessionContextImpl", func() {
 	var (
-		opts   BoshOpts
+		opts   boshopts.BoshOpts
 		config *fakeconf.FakeConfig
 		fs     *fakesys.FakeFileSystem
 	)
 
 	BeforeEach(func() {
-		opts = BoshOpts{}
+		opts = boshopts.BoshOpts{}
 		config = &fakeconf.FakeConfig{
 			ResolveEnvironmentStub: func(in string) string { return in },
 		}
@@ -93,13 +94,13 @@ var _ = Describe("SessionContextImpl", func() {
 
 		It("returns global option if provided", func() {
 			config.CACertReturns("config-cert")
-			opts.CACertOpt = CACertArg{Content: "opt-cert"}
+			opts.CACertOpt = boshopts.CACertArg{Content: "opt-cert"}
 			Expect(build().CACert()).To(Equal("opt-cert"))
 		})
 
 		It("returns config value if global option is not set", func() {
 			config.CACertReturns("config-cert")
-			opts.CACertOpt = CACertArg{}
+			opts.CACertOpt = boshopts.CACertArg{}
 			Expect(build().CACert()).To(Equal("config-cert"))
 		})
 

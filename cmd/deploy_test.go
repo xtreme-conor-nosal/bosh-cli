@@ -9,6 +9,7 @@ import (
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
 	fakecmd "github.com/cloudfoundry/bosh-cli/cmd/cmdfakes"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
@@ -38,13 +39,13 @@ var _ = Describe("DeployCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts DeployOpts
+			opts boshopts.DeployOpts
 		)
 
 		BeforeEach(func() {
-			opts = DeployOpts{
-				Args: DeployArgs{
-					Manifest: FileBytesArg{Bytes: []byte("name: dep")},
+			opts = boshopts.DeployOpts{
+				Args: boshopts.DeployArgs{
+					Manifest: boshopts.FileBytesArg{Bytes: []byte("name: dep")},
 				},
 			}
 		})
@@ -99,7 +100,7 @@ var _ = Describe("DeployCmd", func() {
 		})
 
 		It("deploys templated manifest", func() {
-			opts.Args.Manifest = FileBytesArg{
+			opts.Args.Manifest = boshopts.FileBytesArg{
 				Bytes: []byte("name: dep\nname1: ((name1))\nname2: ((name2))\n"),
 			}
 
@@ -112,7 +113,7 @@ var _ = Describe("DeployCmd", func() {
 				{Vars: boshtpl.StaticVariables(map[string]interface{}{"name2": "val2-from-file"})},
 			}
 
-			opts.OpsFiles = []OpsFileArg{
+			opts.OpsFiles = []boshopts.OpsFileArg{
 				{
 					Ops: patch.Ops([]patch.Op{
 						patch.ReplaceOp{Path: patch.MustNewPointerFromString("/xyz?"), Value: "val"},
@@ -130,7 +131,7 @@ var _ = Describe("DeployCmd", func() {
 		})
 
 		It("does not deploy if name specified in the manifest does not match deployment's name", func() {
-			opts.Args.Manifest = FileBytesArg{
+			opts.Args.Manifest = boshopts.FileBytesArg{
 				Bytes: []byte("name: other-name"),
 			}
 
@@ -143,7 +144,7 @@ var _ = Describe("DeployCmd", func() {
 		})
 
 		It("uploads releases provided in the manifest after manifest has been interpolated", func() {
-			opts.Args.Manifest = FileBytesArg{
+			opts.Args.Manifest = boshopts.FileBytesArg{
 				Bytes: []byte("name: dep\nbefore-upload-manifest: ((key))"),
 			}
 
@@ -166,7 +167,7 @@ var _ = Describe("DeployCmd", func() {
 		})
 
 		It("returns error and does not deploy if uploading releases fails", func() {
-			opts.Args.Manifest = FileBytesArg{
+			opts.Args.Manifest = boshopts.FileBytesArg{
 				Bytes: []byte(`
 name: dep
 releases:
@@ -187,7 +188,7 @@ releases:
 		})
 
 		It("uploads releases but does not deploy if confirmation is rejected", func() {
-			opts.Args.Manifest = FileBytesArg{
+			opts.Args.Manifest = boshopts.FileBytesArg{
 				Bytes: []byte(`
 name: dep
 releases:

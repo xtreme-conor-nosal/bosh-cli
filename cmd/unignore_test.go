@@ -5,6 +5,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 
 	"errors"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
@@ -24,11 +25,11 @@ var _ = Describe("UnignoreCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts UnignoreOpts
+			opts boshopts.UnignoreOpts
 		)
 
 		BeforeEach(func() {
-			opts = UnignoreOpts{}
+			opts = boshopts.UnignoreOpts{}
 		})
 
 		act := func() error {

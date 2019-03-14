@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -19,7 +20,7 @@ var _ = Describe("EnvironmentCmd", func() {
 		ui       *fakeui.FakeUI
 		director *fakedir.FakeDirector
 		command  EnvironmentCmd
-		opts     EnvironmentOpts
+		opts     boshopts.EnvironmentOpts
 	)
 
 	BeforeEach(func() {
@@ -156,7 +157,7 @@ var _ = Describe("EnvironmentCmd", func() {
 
 		Context("When details flag is passed", func() {
 			BeforeEach(func() {
-				opts = EnvironmentOpts{Details: true}
+				opts = boshopts.EnvironmentOpts{Details: true}
 			})
 
 			It("it renders the certificates information", func() {

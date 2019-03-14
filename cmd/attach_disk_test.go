@@ -2,7 +2,9 @@ package cmd_test
 
 import (
 	"errors"
+
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	. "github.com/onsi/ginkgo"
@@ -23,7 +25,7 @@ var _ = Describe("AttachDisk", func() {
 
 	Describe("Run", func() {
 		var (
-			opts           AttachDiskOpts
+			opts           boshopts.AttachDiskOpts
 			act            func() error
 			instanceSlug   boshdir.InstanceSlug
 			diskCid        string
@@ -40,8 +42,8 @@ var _ = Describe("AttachDisk", func() {
 			diskCid = "some-disk-id"
 			diskProperties = "copy"
 
-			opts = AttachDiskOpts{
-				Args: AttachDiskArgs{
+			opts = boshopts.AttachDiskOpts{
+				Args: boshopts.AttachDiskArgs{
 					Slug:    instanceSlug,
 					DiskCID: diskCid,
 				},

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -14,7 +15,7 @@ func NewDiffConfigCmd(ui boshui.UI, director boshdir.Director) DiffConfigCmd {
 	return DiffConfigCmd{ui: ui, director: director}
 }
 
-func (c DiffConfigCmd) Run(opts DiffConfigOpts) error {
+func (c DiffConfigCmd) Run(opts boshopts.DiffConfigOpts) error {
 	configDiff, err := c.director.DiffConfigByIDOrContent(opts.FromID, opts.FromContent.Bytes, opts.ToID, opts.ToContent.Bytes)
 	if err != nil {
 		return err

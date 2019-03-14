@@ -5,6 +5,7 @@ import (
 
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 )
 
@@ -17,7 +18,7 @@ func NewExportReleaseCmd(deployment boshdir.Deployment, downloader Downloader) E
 	return ExportReleaseCmd{deployment: deployment, downloader: downloader}
 }
 
-func (c ExportReleaseCmd) Run(opts ExportReleaseOpts) error {
+func (c ExportReleaseCmd) Run(opts boshopts.ExportReleaseOpts) error {
 	rel := opts.Args.ReleaseSlug
 	os := opts.Args.OSVersionSlug
 	jobs := opts.Jobs

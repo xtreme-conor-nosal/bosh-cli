@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -28,7 +29,7 @@ var _ = Describe("SnapshotsCmd", func() {
 	})
 
 	Describe("Run", func() {
-		act := func() error { return command.Run(SnapshotsOpts{}) }
+		act := func() error { return command.Run(boshopts.SnapshotsOpts{}) }
 
 		It("lists current snapshots", func() {
 			jobIndex := 10

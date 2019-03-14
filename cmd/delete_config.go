@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
@@ -15,8 +16,8 @@ func NewDeleteConfigCmd(ui boshui.UI, director boshdir.Director) DeleteConfigCmd
 	return DeleteConfigCmd{ui: ui, director: director}
 }
 
-func (c DeleteConfigCmd) Run(opts DeleteConfigOpts) error {
-	if opts == (DeleteConfigOpts{}) {
+func (c DeleteConfigCmd) Run(opts boshopts.DeleteConfigOpts) error {
+	if opts == (boshopts.DeleteConfigOpts{}) {
 		return bosherr.Error("Either <ID> or parameters --type and --name must be provided")
 	}
 

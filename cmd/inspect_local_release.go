@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshrel "github.com/cloudfoundry/bosh-cli/release"
 	biui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -20,7 +21,7 @@ func NewInspectLocalReleaseCmd(
 	}
 }
 
-func (cmd InspectLocalReleaseCmd) Run(opts InspectLocalReleaseOpts) error {
+func (cmd InspectLocalReleaseCmd) Run(opts boshopts.InspectLocalReleaseOpts) error {
 	release, err := cmd.reader.Read(opts.Args.PathToRelease)
 	if err != nil {
 		return err

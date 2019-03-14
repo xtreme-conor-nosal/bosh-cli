@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 
 	fakecmd "github.com/cloudfoundry/bosh-cli/cmd/cmdfakes"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
@@ -32,15 +33,15 @@ var _ = Describe("RunErrandCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts RunErrandOpts
+			opts boshopts.RunErrandOpts
 		)
 
 		BeforeEach(func() {
-			opts = RunErrandOpts{
-				Args:        RunErrandArgs{Name: "errand-name"},
+			opts = boshopts.RunErrandOpts{
+				Args:        boshopts.RunErrandArgs{Name: "errand-name"},
 				KeepAlive:   true,
 				WhenChanged: true,
-				InstanceGroupOrInstanceSlugFlags: InstanceGroupOrInstanceSlugFlags{
+				InstanceGroupOrInstanceSlugFlags: boshopts.InstanceGroupOrInstanceSlugFlags{
 					Slugs: []boshdir.InstanceGroupOrInstanceSlug{
 						boshdir.NewInstanceGroupOrInstanceSlug("group2", "uuid"),
 					},
@@ -54,7 +55,7 @@ var _ = Describe("RunErrandCmd", func() {
 			Context("when multiple errands return", func() {
 				It("downloads logs if requested", func() {
 					opts.DownloadLogs = true
-					opts.LogsDirectory = DirOrCWDArg{Path: "/fake-dir"}
+					opts.LogsDirectory = boshopts.DirOrCWDArg{Path: "/fake-dir"}
 
 					result := []boshdir.ErrandResult{{
 						ExitCode:        0,
@@ -97,7 +98,7 @@ var _ = Describe("RunErrandCmd", func() {
 
 				It("does not download logs if requested and not logs blob returned", func() {
 					opts.DownloadLogs = true
-					opts.LogsDirectory = DirOrCWDArg{Path: "/fake-dir"}
+					opts.LogsDirectory = boshopts.DirOrCWDArg{Path: "/fake-dir"}
 
 					result := []boshdir.ErrandResult{{ExitCode: 0}}
 
@@ -185,7 +186,7 @@ var _ = Describe("RunErrandCmd", func() {
 
 			It("downloads logs if requested", func() {
 				opts.DownloadLogs = true
-				opts.LogsDirectory = DirOrCWDArg{Path: "/fake-dir"}
+				opts.LogsDirectory = boshopts.DirOrCWDArg{Path: "/fake-dir"}
 
 				result := []boshdir.ErrandResult{{
 					ExitCode:        0,
@@ -218,7 +219,7 @@ var _ = Describe("RunErrandCmd", func() {
 
 			It("does not download logs if requested and not logs blob returned", func() {
 				opts.DownloadLogs = true
-				opts.LogsDirectory = DirOrCWDArg{Path: "/fake-dir"}
+				opts.LogsDirectory = boshopts.DirOrCWDArg{Path: "/fake-dir"}
 
 				result := []boshdir.ErrandResult{{ExitCode: 0}}
 

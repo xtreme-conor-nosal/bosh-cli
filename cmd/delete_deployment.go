@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -14,7 +15,7 @@ func NewDeleteDeploymentCmd(ui boshui.UI, deployment boshdir.Deployment) DeleteD
 	return DeleteDeploymentCmd{ui: ui, deployment: deployment}
 }
 
-func (c DeleteDeploymentCmd) Run(opts DeleteDeploymentOpts) error {
+func (c DeleteDeploymentCmd) Run(opts boshopts.DeleteDeploymentOpts) error {
 	err := c.ui.AskForConfirmation()
 	if err != nil {
 		return err

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -14,7 +15,7 @@ func NewStopCmd(ui boshui.UI, deployment boshdir.Deployment) StopCmd {
 	return StopCmd{ui: ui, deployment: deployment}
 }
 
-func (c StopCmd) Run(opts StopOpts) error {
+func (c StopCmd) Run(opts boshopts.StopOpts) error {
 	err := c.ui.AskForConfirmation()
 	if err != nil {
 		return err

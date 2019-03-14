@@ -5,6 +5,7 @@ import (
 
 	"fmt"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	biui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -24,7 +25,7 @@ func NewRunErrandCmd(
 	return RunErrandCmd{deployment: deployment, downloader: downloader, ui: ui}
 }
 
-func (c RunErrandCmd) Run(opts RunErrandOpts) error {
+func (c RunErrandCmd) Run(opts boshopts.RunErrandOpts) error {
 	results, err := c.deployment.RunErrand(
 		opts.Args.Name,
 		opts.KeepAlive,

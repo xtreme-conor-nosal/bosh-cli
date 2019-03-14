@@ -7,6 +7,7 @@ import (
 	"github.com/cppforlife/go-patch/patch"
 
 	cmdconf "github.com/cloudfoundry/bosh-cli/cmd/config"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	"github.com/cloudfoundry/bosh-cli/crypto"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
@@ -23,13 +24,13 @@ import (
 )
 
 type Cmd struct {
-	BoshOpts BoshOpts
+	BoshOpts boshopts.BoshOpts
 	Opts     interface{}
 
 	deps BasicDeps
 }
 
-func NewCmd(boshOpts BoshOpts, opts interface{}, deps BasicDeps) Cmd {
+func NewCmd(boshOpts boshopts.BoshOpts, opts interface{}, deps BasicDeps) Cmd {
 	return Cmd{boshOpts, opts, deps}
 }
 
@@ -55,13 +56,13 @@ func (c Cmd) Execute() (cmdErr error) {
 	deps := c.deps
 
 	switch opts := c.Opts.(type) {
-	case *EnvironmentOpts:
+	case *boshopts.EnvironmentOpts:
 		return NewEnvironmentCmd(deps.UI, c.director()).Run(*opts)
 
-	case *EnvironmentsOpts:
+	case *boshopts.EnvironmentsOpts:
 		return NewEnvironmentsCmd(c.config(), deps.UI).Run()
 
-	case *CreateEnvOpts:
+	case *boshopts.CreateEnvOpts:
 		envProvider := func(manifestPath string, statePath string, vars boshtpl.Variables, op patch.Op) DeploymentPreparer {
 			return NewEnvFactory(deps, manifestPath, statePath, vars, op, opts.RecreatePersistentDisks).Preparer()
 		}
@@ -69,7 +70,7 @@ func (c Cmd) Execute() (cmdErr error) {
 		stage := boshui.NewStage(deps.UI, deps.Time, deps.Logger)
 		return NewCreateEnvCmd(deps.UI, envProvider).Run(stage, *opts)
 
-	case *DeleteEnvOpts:
+	case *boshopts.DeleteEnvOpts:
 		envProvider := func(manifestPath string, statePath string, vars boshtpl.Variables, op patch.Op) DeploymentDeleter {
 			return NewEnvFactory(deps, manifestPath, statePath, vars, op, false).Deleter()
 		}
@@ -77,17 +78,17 @@ func (c Cmd) Execute() (cmdErr error) {
 		stage := boshui.NewStage(deps.UI, deps.Time, deps.Logger)
 		return NewDeleteEnvCmd(deps.UI, envProvider).Run(stage, *opts)
 
-	case *AliasEnvOpts:
+	case *boshopts.AliasEnvOpts:
 		sessionFactory := func(config cmdconf.Config) Session {
 			return NewSessionFromOpts(c.BoshOpts, config, deps.UI, true, false, deps.FS, deps.Logger)
 		}
 
 		return NewAliasEnvCmd(sessionFactory, c.config(), deps.UI).Run(*opts)
 
-	case *UnaliasEnvOpts:
+	case *boshopts.UnaliasEnvOpts:
 		return NewUnaliasEnvCmd(c.config()).Run(*opts)
 
-	case *LogInOpts:
+	case *boshopts.LogInOpts:
 		sessionFactory := func(config cmdconf.Config) Session {
 			return NewSessionFromOpts(c.BoshOpts, config, deps.UI, true, true, deps.FS, deps.Logger)
 		}
@@ -105,39 +106,39 @@ func (c Cmd) Execute() (cmdErr error) {
 
 		return NewLogInCmd(basicStrategy, uaaStrategy, anonDirector).Run()
 
-	case *LogOutOpts:
+	case *boshopts.LogOutOpts:
 		config := c.config()
 		sess := NewSessionFromOpts(c.BoshOpts, config, deps.UI, true, true, deps.FS, deps.Logger)
 		return NewLogOutCmd(sess.Environment(), config, deps.UI).Run()
 
-	case *TaskOpts:
+	case *boshopts.TaskOpts:
 		eventsTaskReporter := boshuit.NewReporter(deps.UI, true)
 		plainTaskReporter := boshuit.NewReporter(deps.UI, false)
 		return NewTaskCmd(eventsTaskReporter, plainTaskReporter, c.director()).Run(*opts)
 
-	case *TasksOpts:
+	case *boshopts.TasksOpts:
 		return NewTasksCmd(deps.UI, c.director()).Run(*opts)
 
-	case *CancelTaskOpts:
+	case *boshopts.CancelTaskOpts:
 		return NewCancelTaskCmd(c.director()).Run(*opts)
 
-	case *DeploymentOpts:
+	case *boshopts.DeploymentOpts:
 		sess := NewSessionFromOpts(c.BoshOpts, c.config(), deps.UI, true, false, deps.FS, deps.Logger)
 		return NewDeploymentCmd(sess, c.config(), deps.UI).Run()
 
-	case *DeploymentsOpts:
+	case *boshopts.DeploymentsOpts:
 		return NewDeploymentsCmd(deps.UI, c.director()).Run()
 
-	case *DeleteDeploymentOpts:
+	case *boshopts.DeleteDeploymentOpts:
 		return NewDeleteDeploymentCmd(deps.UI, c.deployment()).Run(*opts)
 
-	case *ReleasesOpts:
+	case *boshopts.ReleasesOpts:
 		return NewReleasesCmd(deps.UI, c.director()).Run()
 
-	case *UploadReleaseOpts:
+	case *boshopts.UploadReleaseOpts:
 		relProv, relDirProv := c.releaseProviders()
 
-		releaseDirFactory := func(dir DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir) {
+		releaseDirFactory := func(dir boshopts.DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir) {
 			releaseReader := relDirProv.NewReleaseReader(dir.Path, c.BoshOpts.Parallel)
 			releaseDir := relDirProv.NewFSReleaseDir(dir.Path, c.BoshOpts.Parallel)
 			return releaseReader, releaseDir
@@ -161,130 +162,130 @@ func (c Cmd) Execute() (cmdErr error) {
 
 		return cmd.Run(*opts)
 
-	case *DeleteReleaseOpts:
+	case *boshopts.DeleteReleaseOpts:
 		return NewDeleteReleaseCmd(deps.UI, c.director()).Run(*opts)
 
-	case *StemcellsOpts:
+	case *boshopts.StemcellsOpts:
 		return NewStemcellsCmd(deps.UI, c.director()).Run()
 
-	case *UploadStemcellOpts:
+	case *boshopts.UploadStemcellOpts:
 		stemcellArchiveFactory := func(path string) boshdir.StemcellArchive {
 			return boshdir.NewFSStemcellArchive(path, deps.FS)
 		}
 
 		return NewUploadStemcellCmd(c.director(), stemcellArchiveFactory, deps.UI).Run(*opts)
 
-	case *DeleteStemcellOpts:
+	case *boshopts.DeleteStemcellOpts:
 		return NewDeleteStemcellCmd(deps.UI, c.director()).Run(*opts)
 
-	case *RepackStemcellOpts:
+	case *boshopts.RepackStemcellOpts:
 		stemcellReader := bistemcell.NewReader(deps.Compressor, deps.FS)
 		stemcellExtractor := bistemcell.NewExtractor(stemcellReader, deps.FS)
 
 		return NewRepackStemcellCmd(deps.UI, deps.FS, stemcellExtractor).Run(*opts)
 
-	case *InspectStemcellTarballOpts:
+	case *boshopts.InspectStemcellTarballOpts:
 		stemcellArchiveFactory := func(path string) boshdir.StemcellArchive {
 			return boshdir.NewFSStemcellArchive(path, deps.FS)
 		}
 
 		return NewInspectStemcellTarballCmd(stemcellArchiveFactory, deps.UI).Run(*opts)
 
-	case *LocksOpts:
+	case *boshopts.LocksOpts:
 		return NewLocksCmd(deps.UI, c.director()).Run()
 
-	case *ErrandsOpts:
+	case *boshopts.ErrandsOpts:
 		return NewErrandsCmd(deps.UI, c.deployment()).Run()
 
-	case *RunErrandOpts:
+	case *boshopts.RunErrandOpts:
 		director, deployment := c.directorAndDeployment()
 		downloader := NewUIDownloader(director, deps.Time, deps.FS, deps.UI)
 		return NewRunErrandCmd(deployment, downloader, deps.UI).Run(*opts)
 
-	case *AttachDiskOpts:
+	case *boshopts.AttachDiskOpts:
 		return NewAttachDiskCmd(c.deployment()).Run(*opts)
 
-	case *DisksOpts:
+	case *boshopts.DisksOpts:
 		return NewDisksCmd(deps.UI, c.director()).Run(*opts)
 
-	case *DeleteDiskOpts:
+	case *boshopts.DeleteDiskOpts:
 		return NewDeleteDiskCmd(deps.UI, c.director()).Run(*opts)
 
-	case *OrphanDiskOpts:
+	case *boshopts.OrphanDiskOpts:
 		return NewOrphanDiskCmd(deps.UI, c.director()).Run(*opts)
 
-	case *NetworksOpts:
+	case *boshopts.NetworksOpts:
 		return NewNetworksCmd(deps.UI, c.director()).Run(*opts)
 
-	case *DeleteNetworkOpts:
+	case *boshopts.DeleteNetworkOpts:
 		return NewDeleteNetworkCmd(deps.UI, c.director()).Run(*opts)
 
-	case *SnapshotsOpts:
+	case *boshopts.SnapshotsOpts:
 		return NewSnapshotsCmd(deps.UI, c.deployment()).Run(*opts)
 
-	case *TakeSnapshotOpts:
+	case *boshopts.TakeSnapshotOpts:
 		return NewTakeSnapshotCmd(c.deployment()).Run(*opts)
 
-	case *DeleteSnapshotOpts:
+	case *boshopts.DeleteSnapshotOpts:
 		return NewDeleteSnapshotCmd(deps.UI, c.deployment()).Run(*opts)
 
-	case *DeleteSnapshotsOpts:
+	case *boshopts.DeleteSnapshotsOpts:
 		return NewDeleteSnapshotsCmd(deps.UI, c.deployment()).Run()
 
-	case *DeleteVMOpts:
+	case *boshopts.DeleteVMOpts:
 		return NewDeleteVMCmd(deps.UI, c.deployment()).Run(*opts)
 
-	case *InterpolateOpts:
+	case *boshopts.InterpolateOpts:
 		return NewInterpolateCmd(deps.UI).Run(*opts)
 
-	case *ConfigOpts:
+	case *boshopts.ConfigOpts:
 		return NewConfigCmd(deps.UI, c.director()).Run(*opts)
 
-	case *ConfigsOpts:
+	case *boshopts.ConfigsOpts:
 		return NewConfigsCmd(deps.UI, c.director()).Run(*opts)
 
-	case *DiffConfigOpts:
+	case *boshopts.DiffConfigOpts:
 		return NewDiffConfigCmd(deps.UI, c.director()).Run(*opts)
 
-	case *UpdateConfigOpts:
+	case *boshopts.UpdateConfigOpts:
 		return NewUpdateConfigCmd(deps.UI, c.director()).Run(*opts)
 
-	case *DeleteConfigOpts:
+	case *boshopts.DeleteConfigOpts:
 		return NewDeleteConfigCmd(deps.UI, c.director()).Run(*opts)
 
-	case *CloudConfigOpts:
+	case *boshopts.CloudConfigOpts:
 		return NewCloudConfigCmd(deps.UI, c.director()).Run()
 
-	case *UpdateCloudConfigOpts:
+	case *boshopts.UpdateCloudConfigOpts:
 		return NewUpdateCloudConfigCmd(deps.UI, c.director()).Run(*opts)
 
-	case *CPIConfigOpts:
+	case *boshopts.CPIConfigOpts:
 		return NewCPIConfigCmd(deps.UI, c.director()).Run()
 
-	case *UpdateCPIConfigOpts:
+	case *boshopts.UpdateCPIConfigOpts:
 		return NewUpdateCPIConfigCmd(deps.UI, c.director()).Run(*opts)
 
-	case *RuntimeConfigOpts:
+	case *boshopts.RuntimeConfigOpts:
 		return NewRuntimeConfigCmd(deps.UI, c.director()).Run(*opts)
 
-	case *UpdateRuntimeConfigOpts:
+	case *boshopts.UpdateRuntimeConfigOpts:
 		director := c.director()
 		releaseManager := c.releaseManager(director)
 		return NewUpdateRuntimeConfigCmd(deps.UI, director, releaseManager).Run(*opts)
 
-	case *ManifestOpts:
+	case *boshopts.ManifestOpts:
 		return NewManifestCmd(deps.UI, c.deployment()).Run()
 
-	case *EventsOpts:
+	case *boshopts.EventsOpts:
 		return NewEventsCmd(deps.UI, c.director()).Run(*opts)
 
-	case *EventOpts:
+	case *boshopts.EventOpts:
 		return NewEventCmd(deps.UI, c.director()).Run(*opts)
 
-	case *InspectReleaseOpts:
+	case *boshopts.InspectReleaseOpts:
 		return NewInspectReleaseCmd(deps.UI, c.director()).Run(*opts)
 
-	case *InspectLocalReleaseOpts:
+	case *boshopts.InspectLocalReleaseOpts:
 		relProv, _ := c.releaseProviders()
 
 		return NewInspectLocalReleaseCmd(
@@ -292,96 +293,96 @@ func (c Cmd) Execute() (cmdErr error) {
 			deps.UI,
 		).Run(*opts)
 
-	case *VMsOpts:
+	case *boshopts.VMsOpts:
 		return NewVMsCmd(deps.UI, c.director(), c.BoshOpts.Parallel).Run(*opts)
 
-	case *OrphanedVMsOpts:
+	case *boshopts.OrphanedVMsOpts:
 		return NewOrphanedVMsCmd(deps.UI, c.director()).Run()
 
-	case *InstancesOpts:
+	case *boshopts.InstancesOpts:
 		return NewInstancesCmd(deps.UI, c.director(), c.BoshOpts.Parallel).Run(*opts)
 
-	case *UpdateResurrectionOpts:
+	case *boshopts.UpdateResurrectionOpts:
 		return NewUpdateResurrectionCmd(c.director()).Run(*opts)
 
-	case *IgnoreOpts:
+	case *boshopts.IgnoreOpts:
 		return NewIgnoreCmd(c.deployment()).Run(*opts)
 
-	case *UnignoreOpts:
+	case *boshopts.UnignoreOpts:
 		return NewUnignoreCmd(c.deployment()).Run(*opts)
 
-	case *DeployOpts:
+	case *boshopts.DeployOpts:
 		director, deployment := c.directorAndDeployment()
 		releaseManager := c.releaseManager(director)
 		return NewDeployCmd(deps.UI, deployment, releaseManager).Run(*opts)
 
-	case *StartOpts:
+	case *boshopts.StartOpts:
 		return NewStartCmd(deps.UI, c.deployment()).Run(*opts)
 
-	case *StopOpts:
+	case *boshopts.StopOpts:
 		return NewStopCmd(deps.UI, c.deployment()).Run(*opts)
 
-	case *RestartOpts:
+	case *boshopts.RestartOpts:
 		return NewRestartCmd(deps.UI, c.deployment()).Run(*opts)
 
-	case *RecreateOpts:
+	case *boshopts.RecreateOpts:
 		return NewRecreateCmd(deps.UI, c.deployment()).Run(*opts)
 
-	case *CloudCheckOpts:
+	case *boshopts.CloudCheckOpts:
 		return NewCloudCheckCmd(c.deployment(), deps.UI).Run(*opts)
 
-	case *CleanUpOpts:
+	case *boshopts.CleanUpOpts:
 		return NewCleanUpCmd(deps.UI, c.director()).Run(*opts)
 
-	case *LogsOpts:
+	case *boshopts.LogsOpts:
 		director, deployment := c.directorAndDeployment()
 		downloader := NewUIDownloader(director, deps.Time, deps.FS, deps.UI)
 		sshProvider := boshssh.NewProvider(deps.CmdRunner, deps.FS, deps.UI, deps.Logger)
 		nonIntSSHRunner := sshProvider.NewSSHRunner(false)
 		return NewLogsCmd(deployment, downloader, deps.UUIDGen, nonIntSSHRunner).Run(*opts)
 
-	case *SSHOpts:
+	case *boshopts.SSHOpts:
 		sshProvider := boshssh.NewProvider(deps.CmdRunner, deps.FS, deps.UI, deps.Logger)
 		intSSHRunner := sshProvider.NewSSHRunner(true)
 		nonIntSSHRunner := sshProvider.NewSSHRunner(false)
 		resultsSSHRunner := sshProvider.NewResultsSSHRunner(false)
 		return NewSSHCmd(c.deployment(), deps.UUIDGen, intSSHRunner, nonIntSSHRunner, resultsSSHRunner, deps.UI).Run(*opts)
 
-	case *SCPOpts:
+	case *boshopts.SCPOpts:
 		sshProvider := boshssh.NewProvider(deps.CmdRunner, deps.FS, deps.UI, deps.Logger)
 		scpRunner := sshProvider.NewSCPRunner()
 		return NewSCPCmd(c.deployment(), deps.UUIDGen, scpRunner, deps.UI).Run(*opts)
 
-	case *ExportReleaseOpts:
+	case *boshopts.ExportReleaseOpts:
 		director, deployment := c.directorAndDeployment()
 		downloader := NewUIDownloader(director, deps.Time, deps.FS, deps.UI)
 		return NewExportReleaseCmd(deployment, downloader).Run(*opts)
 
-	case *InitReleaseOpts:
+	case *boshopts.InitReleaseOpts:
 		return NewInitReleaseCmd(c.releaseDir(opts.Directory)).Run(*opts)
 
-	case *ResetReleaseOpts:
+	case *boshopts.ResetReleaseOpts:
 		return NewResetReleaseCmd(c.releaseDir(opts.Directory)).Run(*opts)
 
-	case *GenerateJobOpts:
+	case *boshopts.GenerateJobOpts:
 		return NewGenerateJobCmd(c.releaseDir(opts.Directory)).Run(*opts)
 
-	case *GeneratePackageOpts:
+	case *boshopts.GeneratePackageOpts:
 		return NewGeneratePackageCmd(c.releaseDir(opts.Directory)).Run(*opts)
 
-	case *VendorPackageOpts:
+	case *boshopts.VendorPackageOpts:
 		return NewVendorPackageCmd(c.releaseDir, deps.UI).Run(*opts)
 
-	case *FinalizeReleaseOpts:
+	case *boshopts.FinalizeReleaseOpts:
 		_, relDirProv := c.releaseProviders()
 		releaseReader := relDirProv.NewReleaseReader(opts.Directory.Path, c.BoshOpts.Parallel)
 		releaseDir := relDirProv.NewFSReleaseDir(opts.Directory.Path, c.BoshOpts.Parallel)
 		return NewFinalizeReleaseCmd(releaseReader, releaseDir, deps.UI).Run(*opts)
 
-	case *CreateReleaseOpts:
+	case *boshopts.CreateReleaseOpts:
 		relProv, relDirProv := c.releaseProviders()
 
-		releaseDirFactory := func(dir DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir) {
+		releaseDirFactory := func(dir boshopts.DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir) {
 			releaseReader := relDirProv.NewReleaseReader(dir.Path, c.BoshOpts.Parallel)
 			releaseDir := relDirProv.NewFSReleaseDir(dir.Path, c.BoshOpts.Parallel)
 			return releaseReader, releaseDir
@@ -395,7 +396,7 @@ func (c Cmd) Execute() (cmdErr error) {
 		).Run(*opts)
 		return err
 
-	case *Sha1ifyReleaseOpts:
+	case *boshopts.Sha1ifyReleaseOpts:
 		relProv, _ := c.releaseProviders()
 
 		return NewRedigestReleaseCmd(
@@ -407,7 +408,7 @@ func (c Cmd) Execute() (cmdErr error) {
 			c.deps.UI,
 		).Run(opts.Args)
 
-	case *Sha2ifyReleaseOpts:
+	case *boshopts.Sha2ifyReleaseOpts:
 		relProv, _ := c.releaseProviders()
 
 		return NewRedigestReleaseCmd(
@@ -419,29 +420,29 @@ func (c Cmd) Execute() (cmdErr error) {
 			c.deps.UI,
 		).Run(opts.Args)
 
-	case *BlobsOpts:
+	case *boshopts.BlobsOpts:
 		return NewBlobsCmd(c.blobsDir(opts.Directory), deps.UI).Run()
 
-	case *AddBlobOpts:
+	case *boshopts.AddBlobOpts:
 		return NewAddBlobCmd(c.blobsDir(opts.Directory), deps.FS, deps.UI).Run(*opts)
 
-	case *RemoveBlobOpts:
+	case *boshopts.RemoveBlobOpts:
 		return NewRemoveBlobCmd(c.blobsDir(opts.Directory), deps.UI).Run(*opts)
 
-	case *UploadBlobsOpts:
+	case *boshopts.UploadBlobsOpts:
 		return NewUploadBlobsCmd(c.blobsDir(opts.Directory)).Run()
 
-	case *SyncBlobsOpts:
+	case *boshopts.SyncBlobsOpts:
 		return NewSyncBlobsCmd(c.blobsDir(opts.Directory), c.BoshOpts.Parallel).Run()
 
-	case *CurlOpts:
+	case *boshopts.CurlOpts:
 		return NewCurlCmd(deps.UI, c.director().(boshdir.DirectorImpl).NewHTTPClientRequest()).Run(*opts)
 
-	case *MessageOpts:
+	case *boshopts.MessageOpts:
 		deps.UI.PrintBlock([]byte(opts.Message))
 		return nil
 
-	case *VariablesOpts:
+	case *boshopts.VariablesOpts:
 		return NewVariablesCmd(deps.UI, c.deployment()).Run(*opts)
 
 	default:
@@ -536,7 +537,7 @@ func (c Cmd) releaseProviders() (boshrel.Provider, boshreldir.Provider) {
 func (c Cmd) releaseManager(director boshdir.Director) ReleaseManager {
 	relProv, relDirProv := c.releaseProviders()
 
-	releaseDirFactory := func(dir DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir) {
+	releaseDirFactory := func(dir boshopts.DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir) {
 		releaseReader := relDirProv.NewReleaseReader(dir.Path, c.BoshOpts.Parallel)
 		releaseDir := relDirProv.NewFSReleaseDir(dir.Path, c.BoshOpts.Parallel)
 		return releaseReader, releaseDir
@@ -568,12 +569,12 @@ func (c Cmd) releaseManager(director boshdir.Director) ReleaseManager {
 	return NewReleaseManager(createReleaseCmd, uploadReleaseCmd, c.BoshOpts.Parallel)
 }
 
-func (c Cmd) blobsDir(dir DirOrCWDArg) boshreldir.BlobsDir {
+func (c Cmd) blobsDir(dir boshopts.DirOrCWDArg) boshreldir.BlobsDir {
 	_, relDirProv := c.releaseProviders()
 	return relDirProv.NewFSBlobsDir(dir.Path)
 }
 
-func (c Cmd) releaseDir(dir DirOrCWDArg) boshreldir.ReleaseDir {
+func (c Cmd) releaseDir(dir boshopts.DirOrCWDArg) boshreldir.ReleaseDir {
 	_, relDirProv := c.releaseProviders()
 	return relDirProv.NewFSReleaseDir(dir.Path, c.BoshOpts.Parallel)
 }

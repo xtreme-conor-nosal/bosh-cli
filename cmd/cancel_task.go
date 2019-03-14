@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 )
 
@@ -12,7 +13,7 @@ func NewCancelTaskCmd(director boshdir.Director) CancelTaskCmd {
 	return CancelTaskCmd{director: director}
 }
 
-func (c CancelTaskCmd) Run(opts CancelTaskOpts) error {
+func (c CancelTaskCmd) Run(opts boshopts.CancelTaskOpts) error {
 	task, err := c.director.FindTask(opts.Args.ID)
 	if err != nil {
 		return err

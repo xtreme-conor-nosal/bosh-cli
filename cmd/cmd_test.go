@@ -9,6 +9,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -32,12 +33,12 @@ var _ = Describe("Cmd", func() {
 		deps := NewBasicDeps(confUI, logger)
 		deps.FS = fs
 
-		cmd = NewCmd(BoshOpts{}, nil, deps)
+		cmd = NewCmd(boshopts.BoshOpts{}, nil, deps)
 	})
 
 	Describe("Execute", func() {
 		It("succeeds executing at least one command", func() {
-			cmd.Opts = &InterpolateOpts{}
+			cmd.Opts = &boshopts.InterpolateOpts{}
 
 			err := cmd.Execute()
 			Expect(err).ToNot(HaveOccurred())
@@ -46,7 +47,7 @@ var _ = Describe("Cmd", func() {
 		})
 
 		It("prints message if specified", func() {
-			cmd.Opts = &MessageOpts{Message: "output"}
+			cmd.Opts = &boshopts.MessageOpts{Message: "output"}
 
 			err := cmd.Execute()
 			Expect(err).ToNot(HaveOccurred())
@@ -55,8 +56,8 @@ var _ = Describe("Cmd", func() {
 		})
 
 		It("allows to enable json output", func() {
-			cmd.BoshOpts = BoshOpts{JSONOpt: true}
-			cmd.Opts = &InterpolateOpts{}
+			cmd.BoshOpts = boshopts.BoshOpts{JSONOpt: true}
+			cmd.Opts = &boshopts.InterpolateOpts{}
 
 			err := cmd.Execute()
 			Expect(err).ToNot(HaveOccurred())
@@ -76,8 +77,8 @@ var _ = Describe("Cmd", func() {
 			}
 
 			It("has color in the output enabled by default", func() {
-				cmd.BoshOpts = BoshOpts{}
-				cmd.Opts = &InterpolateOpts{}
+				cmd.BoshOpts = boshopts.BoshOpts{}
+				cmd.Opts = &boshopts.InterpolateOpts{}
 
 				executeCmdAndPrintTable()
 
@@ -86,8 +87,8 @@ var _ = Describe("Cmd", func() {
 			})
 
 			It("allows to disable color in the output", func() {
-				cmd.BoshOpts = BoshOpts{NoColorOpt: true}
-				cmd.Opts = &InterpolateOpts{}
+				cmd.BoshOpts = boshopts.BoshOpts{NoColorOpt: true}
+				cmd.Opts = &boshopts.InterpolateOpts{}
 
 				executeCmdAndPrintTable()
 

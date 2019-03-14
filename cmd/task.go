@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshuit "github.com/cloudfoundry/bosh-cli/ui/task"
 )
@@ -25,7 +26,7 @@ func NewTaskCmd(
 	}
 }
 
-func (c TaskCmd) Run(opts TaskOpts) error {
+func (c TaskCmd) Run(opts boshopts.TaskOpts) error {
 	var task boshdir.Task
 
 	var err error

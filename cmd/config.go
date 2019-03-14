@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
@@ -15,9 +16,9 @@ func NewConfigCmd(ui boshui.UI, director boshdir.Director) ConfigCmd {
 	return ConfigCmd{ui: ui, director: director}
 }
 
-func (c ConfigCmd) Run(opts ConfigOpts) error {
+func (c ConfigCmd) Run(opts boshopts.ConfigOpts) error {
 
-	if opts == (ConfigOpts{}) {
+	if opts == (boshopts.ConfigOpts{}) {
 		return bosherr.Error("Either <ID> or parameters --type and --name must be provided")
 	}
 

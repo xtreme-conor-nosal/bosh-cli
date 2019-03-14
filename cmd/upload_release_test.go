@@ -9,6 +9,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	boshrel "github.com/cloudfoundry/bosh-cli/release"
@@ -36,8 +37,8 @@ var _ = Describe("UploadReleaseCmd", func() {
 		releaseReader = &fakerel.FakeReader{}
 		releaseDir = &fakereldir.FakeReleaseDir{}
 
-		releaseDirFactory := func(dir DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir) {
-			Expect(dir).To(Equal(DirOrCWDArg{Path: "/dir"}))
+		releaseDirFactory := func(dir boshopts.DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir) {
+			Expect(dir).To(Equal(boshopts.DirOrCWDArg{Path: "/dir"}))
 			return releaseReader, releaseDir
 		}
 
@@ -66,12 +67,12 @@ var _ = Describe("UploadReleaseCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts UploadReleaseOpts
+			opts boshopts.UploadReleaseOpts
 		)
 
 		BeforeEach(func() {
-			opts = UploadReleaseOpts{
-				Directory: DirOrCWDArg{Path: "/dir"},
+			opts = boshopts.UploadReleaseOpts{
+				Directory: boshopts.DirOrCWDArg{Path: "/dir"},
 			}
 		})
 
@@ -139,7 +140,7 @@ var _ = Describe("UploadReleaseCmd", func() {
 
 			It("does not upload release if name and version match existing release", func() {
 				opts.Name = "existing-name"
-				opts.Version = VersionArg(semver.MustNewVersionFromString("existing-ver"))
+				opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("existing-ver"))
 
 				director.HasReleaseReturns(true, nil)
 
@@ -159,7 +160,7 @@ var _ = Describe("UploadReleaseCmd", func() {
 
 			It("does not upload compiled release if name, version and stemcell match existing release", func() {
 				opts.Name = "existing-name"
-				opts.Version = VersionArg(semver.MustNewVersionFromString("existing-ver"))
+				opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("existing-ver"))
 				opts.Stemcell = boshdir.NewOSVersionSlug("ubuntu-trusty", "3421")
 
 				director.HasReleaseReturns(true, nil)
@@ -180,7 +181,7 @@ var _ = Describe("UploadReleaseCmd", func() {
 
 			It("uploads release if name and version does not match existing release", func() {
 				opts.Name = "existing-name"
-				opts.Version = VersionArg(semver.MustNewVersionFromString("existing-ver"))
+				opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("existing-ver"))
 
 				director.HasReleaseReturns(false, nil)
 
@@ -359,7 +360,7 @@ var _ = Describe("UploadReleaseCmd", func() {
 			BeforeEach(func() {
 				// Command's --dir flag is not used
 				opts.Args.URL = "git://./some-repo"
-				opts.Directory = DirOrCWDArg{Path: "/dir-that-does-not-matter"}
+				opts.Directory = boshopts.DirOrCWDArg{Path: "/dir-that-does-not-matter"}
 
 				// Destination for git clone
 				fs.TempDirDir = "/dir"
@@ -382,7 +383,7 @@ var _ = Describe("UploadReleaseCmd", func() {
 
 			It("uploads given release", func() {
 				opts.Name = "rel1"
-				opts.Version = VersionArg(semver.MustNewVersionFromString("1.1"))
+				opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("1.1"))
 				afterClone := false
 
 				cmdRunner.SetCmdCallback("git clone git://./some-repo --depth 1 /dir", func() {
@@ -449,7 +450,7 @@ var _ = Describe("UploadReleaseCmd", func() {
 
 			It("does not upload release if name and version match existing release", func() {
 				opts.Name = "existing-name"
-				opts.Version = VersionArg(semver.MustNewVersionFromString("existing-ver"))
+				opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("existing-ver"))
 
 				director.HasReleaseReturns(true, nil)
 
@@ -528,7 +529,7 @@ var _ = Describe("UploadReleaseCmd", func() {
 
 			It("uploads found release based on name and version", func() {
 				opts.Name = "rel1"
-				opts.Version = VersionArg(semver.MustNewVersionFromString("1.1"))
+				opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("1.1"))
 
 				releaseDir.FindReleaseStub = func(name string, version semver.Version) (boshrel.Release, error) {
 					Expect(name).To(Equal("rel1"))

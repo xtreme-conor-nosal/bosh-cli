@@ -5,11 +5,12 @@ import (
 	boshsys "github.com/cloudfoundry/bosh-utils/system"
 
 	cmdconf "github.com/cloudfoundry/bosh-cli/cmd/config"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
 
 func NewSessionFromOpts(
-	opts BoshOpts,
+	opts boshopts.BoshOpts,
 	config cmdconf.Config,
 	ui boshui.UI,
 	printEnvironment bool,

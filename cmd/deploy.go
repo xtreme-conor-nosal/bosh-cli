@@ -3,6 +3,7 @@ package cmd
 import (
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
@@ -26,7 +27,7 @@ func NewDeployCmd(
 	return DeployCmd{ui, deployment, releaseUploader}
 }
 
-func (c DeployCmd) Run(opts DeployOpts) error {
+func (c DeployCmd) Run(opts boshopts.DeployOpts) error {
 	tpl := boshtpl.NewTemplate(opts.Args.Manifest.Bytes)
 
 	bytes, err := tpl.Evaluate(opts.VarFlags.AsVariables(), opts.OpsFlags.AsOp(), boshtpl.EvaluateOpts{})

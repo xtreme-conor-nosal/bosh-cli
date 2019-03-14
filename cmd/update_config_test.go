@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
@@ -30,13 +31,13 @@ var _ = Describe("UpdateConfigCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts UpdateConfigOpts
+			opts boshopts.UpdateConfigOpts
 		)
 
 		BeforeEach(func() {
-			opts = UpdateConfigOpts{
-				Args: UpdateConfigArgs{
-					Config: FileBytesArg{Bytes: []byte("fake-config")},
+			opts = boshopts.UpdateConfigOpts{
+				Args: boshopts.UpdateConfigArgs{
+					Config: boshopts.FileBytesArg{Bytes: []byte("fake-config")},
 				},
 				Type: "my-type",
 				Name: "my-name",
@@ -59,7 +60,7 @@ var _ = Describe("UpdateConfigCmd", func() {
 		})
 
 		It("updates templated config", func() {
-			opts.Args.Config = FileBytesArg{
+			opts.Args.Config = boshopts.FileBytesArg{
 				Bytes: []byte("name1: ((name1))\nname2: ((name2))"),
 			}
 
@@ -72,7 +73,7 @@ var _ = Describe("UpdateConfigCmd", func() {
 				{Vars: boshtpl.StaticVariables(map[string]interface{}{"name2": "val2-from-file"})},
 			}
 
-			opts.OpsFiles = []OpsFileArg{
+			opts.OpsFiles = []boshopts.OpsFileArg{
 				{
 					Ops: patch.Ops([]patch.Op{
 						patch.ReplaceOp{Path: patch.MustNewPointerFromString("/xyz?"), Value: "val"},
@@ -164,9 +165,9 @@ var _ = Describe("UpdateConfigCmd", func() {
 
 		Context("when expected-latest-id is specified", func() {
 			BeforeEach(func() {
-				opts = UpdateConfigOpts{
-					Args: UpdateConfigArgs{
-						Config: FileBytesArg{Bytes: []byte("---")},
+				opts = boshopts.UpdateConfigOpts{
+					Args: boshopts.UpdateConfigArgs{
+						Config: boshopts.FileBytesArg{Bytes: []byte("---")},
 					},
 					Type:             "my-type",
 					Name:             "my-name",
@@ -205,9 +206,9 @@ var _ = Describe("UpdateConfigCmd", func() {
 
 		Context("when uploading an empty YAML document", func() {
 			BeforeEach(func() {
-				opts = UpdateConfigOpts{
-					Args: UpdateConfigArgs{
-						Config: FileBytesArg{Bytes: []byte("---")},
+				opts = boshopts.UpdateConfigOpts{
+					Args: boshopts.UpdateConfigArgs{
+						Config: boshopts.FileBytesArg{Bytes: []byte("---")},
 					},
 					Type: "my-type",
 					Name: "",

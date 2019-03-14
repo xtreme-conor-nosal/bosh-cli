@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -29,11 +30,11 @@ var _ = Describe("TasksCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts TasksOpts
+			opts boshopts.TasksOpts
 		)
 
 		BeforeEach(func() {
-			opts = TasksOpts{}
+			opts = boshopts.TasksOpts{}
 		})
 
 		act := func() error { return command.Run(opts) }
@@ -125,7 +126,7 @@ var _ = Describe("TasksCmd", func() {
 			It("filters tasks based options", func() {
 				director.CurrentTasksReturns(nil, nil)
 
-				opts = TasksOpts{}
+				opts = boshopts.TasksOpts{}
 
 				err := act()
 				Expect(err).ToNot(HaveOccurred())

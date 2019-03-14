@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
 )
@@ -26,12 +27,12 @@ var _ = Describe("DeleteNetworkCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts DeleteNetworkOpts
+			opts boshopts.DeleteNetworkOpts
 		)
 
 		BeforeEach(func() {
-			opts = DeleteNetworkOpts{
-				Args: DeleteNetworkArgs{Name: "network-name"},
+			opts = boshopts.DeleteNetworkOpts{
+				Args: boshopts.DeleteNetworkArgs{Name: "network-name"},
 			}
 		})
 

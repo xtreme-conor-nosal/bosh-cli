@@ -4,6 +4,7 @@ import (
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	boshuuid "github.com/cloudfoundry/bosh-utils/uuid"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshssh "github.com/cloudfoundry/bosh-cli/ssh"
 	biui "github.com/cloudfoundry/bosh-cli/ui"
@@ -30,7 +31,7 @@ func NewSCPCmd(
 	}
 }
 
-func (c SCPCmd) Run(opts SCPOpts) error {
+func (c SCPCmd) Run(opts boshopts.SCPOpts) error {
 	scpArgs := boshssh.NewSCPArgs(opts.Args.Paths, opts.Recursive)
 
 	slug, err := scpArgs.AllOrInstanceGroupOrInstanceSlug()

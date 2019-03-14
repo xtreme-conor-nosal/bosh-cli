@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -15,7 +16,7 @@ func NewEventsCmd(ui boshui.UI, director boshdir.Director) EventsCmd {
 	return EventsCmd{ui: ui, director: director}
 }
 
-func (c EventsCmd) Run(opts EventsOpts) error {
+func (c EventsCmd) Run(opts boshopts.EventsOpts) error {
 	filter := boshdir.EventsFilter{
 		BeforeID:   opts.BeforeID,
 		Before:     opts.Before,

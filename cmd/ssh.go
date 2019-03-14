@@ -4,6 +4,7 @@ import (
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	boshuuid "github.com/cloudfoundry/bosh-utils/uuid"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshssh "github.com/cloudfoundry/bosh-cli/ssh"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
@@ -36,7 +37,7 @@ func NewSSHCmd(
 	}
 }
 
-func (c SSHCmd) Run(opts SSHOpts) error {
+func (c SSHCmd) Run(opts boshopts.SSHOpts) error {
 	if opts.Results || !c.ui.IsInteractive() {
 		if len(opts.Command) == 0 {
 			return bosherr.Errorf("Non-interactive SSH requires non-empty command")

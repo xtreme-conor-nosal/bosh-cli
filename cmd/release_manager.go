@@ -5,6 +5,7 @@ import (
 	"github.com/cppforlife/go-patch/patch"
 	semver "github.com/cppforlife/go-semi-semantic/version"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
 	boshrel "github.com/cloudfoundry/bosh-cli/release"
@@ -18,11 +19,11 @@ type ReleaseManager struct {
 }
 
 type ReleaseUploadingCmd interface {
-	Run(UploadReleaseOpts) error
+	Run(boshopts.UploadReleaseOpts) error
 }
 
 type ReleaseCreatingCmd interface {
-	Run(CreateReleaseOpts) (boshrel.Release, error)
+	Run(boshopts.CreateReleaseOpts) (boshrel.Release, error)
 }
 
 func NewReleaseManager(
@@ -99,11 +100,11 @@ func (m ReleaseManager) createAndUploadRelease(rel boshdir.ManifestRelease) (pat
 		return nil, err
 	}
 
-	uploadOpts := UploadReleaseOpts{
+	uploadOpts := boshopts.UploadReleaseOpts{
 		Name:    rel.Name,
-		Version: VersionArg(ver),
+		Version: boshopts.VersionArg(ver),
 
-		Args: UploadReleaseArgs{URL: URLArg(rel.URL)},
+		Args: boshopts.UploadReleaseArgs{URL: boshopts.URLArg(rel.URL)},
 		SHA1: rel.SHA1,
 	}
 
@@ -112,9 +113,9 @@ func (m ReleaseManager) createAndUploadRelease(rel boshdir.ManifestRelease) (pat
 	}
 
 	if rel.Version == "create" {
-		createOpts := CreateReleaseOpts{
+		createOpts := boshopts.CreateReleaseOpts{
 			Name:             rel.Name,
-			Directory:        DirOrCWDArg{Path: uploadOpts.Args.URL.FilePath()},
+			Directory:        boshopts.DirOrCWDArg{Path: uploadOpts.Args.URL.FilePath()},
 			TimestampVersion: true,
 			Force:            true,
 		}
@@ -124,7 +125,7 @@ func (m ReleaseManager) createAndUploadRelease(rel boshdir.ManifestRelease) (pat
 			return nil, bosherr.WrapErrorf(err, "Processing release '%s/%s'", rel.Name, rel.Version)
 		}
 
-		uploadOpts = UploadReleaseOpts{Release: release}
+		uploadOpts = boshopts.UploadReleaseOpts{Release: release}
 
 		replaceOp := patch.ReplaceOp{
 			// equivalent to /releases/name=?/version

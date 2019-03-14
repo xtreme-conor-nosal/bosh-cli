@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/cppforlife/go-patch/patch"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -18,7 +19,7 @@ func NewCreateEnvCmd(ui boshui.UI, envProvider EnvProviderFunction) *CreateEnvCm
 	return &CreateEnvCmd{ui: ui, envProvider: envProvider}
 }
 
-func (c *CreateEnvCmd) Run(stage boshui.Stage, opts CreateEnvOpts) error {
+func (c *CreateEnvCmd) Run(stage boshui.Stage, opts boshopts.CreateEnvOpts) error {
 	c.ui.BeginLinef("Deployment manifest: '%s'\n", opts.Args.Manifest.Path)
 
 	depPreparer := c.envProvider(opts.Args.Manifest.Path, opts.StatePath, opts.VarFlags.AsVariables(), opts.OpsFlags.AsOp())

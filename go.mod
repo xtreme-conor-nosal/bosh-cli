@@ -1,0 +1,55 @@
+module github.com/xtreme-conor-nosal/bosh-cli
+
+require (
+	cloud.google.com/go v0.32.0
+	code.cloudfoundry.org/clock v0.0.0-20180518195852-02e53af36e6c
+	code.cloudfoundry.org/workpool v0.0.0-20170718174546-99757edba735
+	github.com/aws/aws-sdk-go v1.15.73
+	github.com/bmatcuk/doublestar v1.1.1
+	github.com/charlievieth/fs v0.0.0-20170613215519-7dc373669fa1
+	github.com/cheggaaa/pb v0.0.0-20181017153443-751f9183c336
+	github.com/cloudfoundry/bosh-agent v2.169.0+incompatible
+	github.com/cloudfoundry/bosh-cli v5.4.0+incompatible // indirect
+	github.com/cloudfoundry/bosh-davcli v0.0.30
+	github.com/cloudfoundry/bosh-gcscli v0.0.6
+	github.com/cloudfoundry/bosh-s3cli v0.0.78
+	github.com/cloudfoundry/bosh-utils v0.0.0-20181109230347-f1d51d8b54a5
+	github.com/cloudfoundry/config-server v0.1.13
+	github.com/cloudfoundry/go-socks5 v0.0.0-20180221174514-54f73bdb8a8e
+	github.com/cloudfoundry/socks5-proxy v0.0.0-20180530211953-3659db090cb2
+	github.com/cppforlife/go-patch v0.1.0
+	github.com/cppforlife/go-semi-semantic v0.0.0-20160921010311-576b6af77ae4
+	github.com/dustin/go-humanize v1.0.0
+	github.com/fatih/color v1.7.0
+	github.com/golang/mock v1.1.1
+	github.com/golang/protobuf v1.2.0
+	github.com/googleapis/gax-go v2.0.0+incompatible
+	github.com/hashicorp/errwrap v1.0.0
+	github.com/hashicorp/go-multierror v1.0.0
+	github.com/hpcloud/tail v1.0.0
+	github.com/jessevdk/go-flags v1.4.0 // indirect
+	github.com/jmespath/go-jmespath v0.0.0-20160202185014-0b12d6b521d8
+	github.com/mattn/go-colorable v0.0.9
+	github.com/mattn/go-isatty v0.0.4
+	github.com/mattn/go-runewidth v0.0.3
+	github.com/maxbrunsfeld/counterfeiter v0.0.0-20181015222824-2d74a219416b
+	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
+	github.com/onsi/ginkgo v1.6.0
+	github.com/onsi/gomega v1.4.2
+	github.com/pivotal-cf/paraphernalia v0.0.0-20180203224945-a64ae2051c20
+	github.com/vito/go-interact v0.0.0-20171111012221-fa338ed9e9ec
+	go.opencensus.io v0.18.0
+	golang.org/x/crypto v0.0.0-20181106171534-e4dc69e5b2fd
+	golang.org/x/net v0.0.0-20181108082009-03003ca0c849
+	golang.org/x/oauth2 v0.0.0-20181106182150-f42d05182288
+	golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8
+	golang.org/x/text v0.3.0
+	golang.org/x/tools v0.0.0-20181109202920-92d8274bd7b8
+	google.golang.org/api v0.0.0-20181108001712-cfbc873f6b93
+	google.golang.org/appengine v1.3.0
+	google.golang.org/genproto v0.0.0-20181109154231-b5d43981345b
+	google.golang.org/grpc v1.16.0
+	gopkg.in/fsnotify.v1 v1.4.7
+	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7
+	gopkg.in/yaml.v2 v2.2.1
+)

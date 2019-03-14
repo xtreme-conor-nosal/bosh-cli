@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -15,7 +16,7 @@ func NewTasksCmd(ui boshui.UI, director boshdir.Director) TasksCmd {
 	return TasksCmd{ui: ui, director: director}
 }
 
-func (c TasksCmd) Run(opts TasksOpts) error {
+func (c TasksCmd) Run(opts boshopts.TasksOpts) error {
 	filter := boshdir.TasksFilter{
 		All:        opts.All,
 		Deployment: opts.Deployment,

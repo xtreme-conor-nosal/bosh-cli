@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -14,7 +15,7 @@ func NewDeleteDiskCmd(ui boshui.UI, director boshdir.Director) DeleteDiskCmd {
 	return DeleteDiskCmd{ui: ui, director: director}
 }
 
-func (c DeleteDiskCmd) Run(opts DeleteDiskOpts) error {
+func (c DeleteDiskCmd) Run(opts boshopts.DeleteDiskOpts) error {
 	err := c.ui.AskForConfirmation()
 	if err != nil {
 		return err

@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	fakereldir "github.com/cloudfoundry/bosh-cli/releasedir/releasedirfakes"
 )
 
@@ -23,11 +24,11 @@ var _ = Describe("GeneratePackageCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts GeneratePackageOpts
+			opts boshopts.GeneratePackageOpts
 		)
 
 		BeforeEach(func() {
-			opts = GeneratePackageOpts{Args: GeneratePackageArgs{Name: "pkg"}}
+			opts = boshopts.GeneratePackageOpts{Args: boshopts.GeneratePackageArgs{Name: "pkg"}}
 		})
 
 		act := func() error { return command.Run(opts) }

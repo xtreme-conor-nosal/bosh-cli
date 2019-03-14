@@ -1,17 +1,18 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
 )
 
 type ConfigDiffTable struct {
 	diff Diff
-	opts DiffConfigOpts
+	opts boshopts.DiffConfigOpts
 	ui   boshui.UI
 }
 
-func NewConfigDiffTable(diff Diff, opts DiffConfigOpts, ui boshui.UI) ConfigDiffTable {
+func NewConfigDiffTable(diff Diff, opts boshopts.DiffConfigOpts, ui boshui.UI) ConfigDiffTable {
 	return ConfigDiffTable{diff, opts, ui}
 }
 

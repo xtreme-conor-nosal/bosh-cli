@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
@@ -16,7 +17,7 @@ func NewUpdateConfigCmd(ui boshui.UI, director boshdir.Director) UpdateConfigCmd
 	return UpdateConfigCmd{ui: ui, director: director}
 }
 
-func (c UpdateConfigCmd) Run(opts UpdateConfigOpts) error {
+func (c UpdateConfigCmd) Run(opts boshopts.UpdateConfigOpts) error {
 	tpl := boshtpl.NewTemplate(opts.Args.Config.Bytes)
 
 	bytes, err := tpl.Evaluate(opts.VarFlags.AsVariables(), opts.OpsFlags.AsOp(), boshtpl.EvaluateOpts{})

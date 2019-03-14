@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -14,7 +15,7 @@ func NewDeleteNetworkCmd(ui boshui.UI, director boshdir.Director) DeleteNetworkC
 	return DeleteNetworkCmd{ui: ui, director: director}
 }
 
-func (c DeleteNetworkCmd) Run(opts DeleteNetworkOpts) error {
+func (c DeleteNetworkCmd) Run(opts boshopts.DeleteNetworkOpts) error {
 	err := c.ui.AskForConfirmation()
 	if err != nil {
 		return err

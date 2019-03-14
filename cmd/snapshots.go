@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -15,7 +16,7 @@ func NewSnapshotsCmd(ui boshui.UI, deployment boshdir.Deployment) SnapshotsCmd {
 	return SnapshotsCmd{ui: ui, deployment: deployment}
 }
 
-func (c SnapshotsCmd) Run(opts SnapshotsOpts) error {
+func (c SnapshotsCmd) Run(opts boshopts.SnapshotsOpts) error {
 	snapshots, err := c.deployment.Snapshots()
 	if err != nil {
 		return err

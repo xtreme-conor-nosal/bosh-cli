@@ -9,6 +9,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	fakereldir "github.com/cloudfoundry/bosh-cli/releasedir/releasedirfakes"
 )
 
@@ -29,13 +30,13 @@ var _ = Describe("RemoveBlobCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts RemoveBlobOpts
+			opts boshopts.RemoveBlobOpts
 		)
 
 		BeforeEach(func() {
 			fs.WriteFileString("/path/to/blob.tgz", "blob")
-			opts = RemoveBlobOpts{
-				Args: RemoveBlobArgs{BlobsPath: "/path/to/blob.tgz"},
+			opts = boshopts.RemoveBlobOpts{
+				Args: boshopts.RemoveBlobArgs{BlobsPath: "/path/to/blob.tgz"},
 			}
 		})
 

@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
@@ -29,13 +30,13 @@ var _ = Describe("UpdateCPIConfigCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts UpdateCPIConfigOpts
+			opts boshopts.UpdateCPIConfigOpts
 		)
 
 		BeforeEach(func() {
-			opts = UpdateCPIConfigOpts{
-				Args: UpdateCPIConfigArgs{
-					CPIConfig: FileBytesArg{Bytes: []byte("cpi-config")},
+			opts = boshopts.UpdateCPIConfigOpts{
+				Args: boshopts.UpdateCPIConfigArgs{
+					CPIConfig: boshopts.FileBytesArg{Bytes: []byte("cpi-config")},
 				},
 			}
 		})
@@ -53,7 +54,7 @@ var _ = Describe("UpdateCPIConfigCmd", func() {
 		})
 
 		It("updates templated cpi config", func() {
-			opts.Args.CPIConfig = FileBytesArg{
+			opts.Args.CPIConfig = boshopts.FileBytesArg{
 				Bytes: []byte("name: ((name))\ntype: ((type))"),
 			}
 
@@ -66,7 +67,7 @@ var _ = Describe("UpdateCPIConfigCmd", func() {
 				{Vars: boshtpl.StaticVariables(map[string]interface{}{"type": "val2-from-file"})},
 			}
 
-			opts.OpsFiles = []OpsFileArg{
+			opts.OpsFiles = []boshopts.OpsFileArg{
 				{
 					Ops: patch.Ops([]patch.Op{
 						patch.ReplaceOp{Path: patch.MustNewPointerFromString("/xyz?"), Value: "val"},
@@ -127,9 +128,9 @@ var _ = Describe("UpdateCPIConfigCmd", func() {
 
 		Context("when NoRedact option is passed", func() {
 			BeforeEach(func() {
-				opts = UpdateCPIConfigOpts{
-					Args: UpdateCPIConfigArgs{
-						CPIConfig: FileBytesArg{Bytes: []byte("cpis: config")},
+				opts = boshopts.UpdateCPIConfigOpts{
+					Args: boshopts.UpdateCPIConfigArgs{
+						CPIConfig: boshopts.FileBytesArg{Bytes: []byte("cpis: config")},
 					},
 					NoRedact: true,
 				}

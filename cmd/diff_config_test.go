@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -28,11 +29,11 @@ var _ = Describe("DiffConfigCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts DiffConfigOpts
+			opts boshopts.DiffConfigOpts
 		)
 
 		BeforeEach(func() {
-			opts = DiffConfigOpts{
+			opts = boshopts.DiffConfigOpts{
 				FromID: "1",
 				ToID:   "2",
 			}

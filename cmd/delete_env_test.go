@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	mock_cmd "github.com/cloudfoundry/bosh-cli/cmd/mocks"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	fakesys "github.com/cloudfoundry/bosh-utils/system/fakes"
 	"github.com/golang/mock/gomock"
@@ -68,16 +69,16 @@ var _ = Describe("DeleteEnvCmd", func() {
 			It("gets passed to DeleteDeployment", func() {
 				skipDrain = true
 				mockDeploymentDeleter.EXPECT().DeleteDeployment(skipDrain, fakeStage).Return(nil)
-				newDeleteEnvCmd().Run(fakeStage, bicmd.DeleteEnvOpts{
-					Args: bicmd.DeleteEnvArgs{
-						Manifest: bicmd.FileBytesWithPathArg{Path: deploymentManifestPath},
+				newDeleteEnvCmd().Run(fakeStage, boshopts.DeleteEnvOpts{
+					Args: boshopts.DeleteEnvArgs{
+						Manifest: boshopts.FileBytesWithPathArg{Path: deploymentManifestPath},
 					},
 					SkipDrain: skipDrain,
-					VarFlags: bicmd.VarFlags{
+					VarFlags: boshopts.VarFlags{
 						VarKVs: []boshtpl.VarKV{{Name: "key", Value: "value"}},
 					},
-					OpsFlags: bicmd.OpsFlags{
-						OpsFiles: []bicmd.OpsFileArg{
+					OpsFlags: boshopts.OpsFlags{
+						OpsFiles: []boshopts.OpsFileArg{
 							{Ops: patch.Ops([]patch.Op{patch.ErrOp{}})},
 						},
 					},
@@ -88,16 +89,16 @@ var _ = Describe("DeleteEnvCmd", func() {
 		Context("state path is NOT specified", func() {
 			It("sends the manifest on to the deleter", func() {
 				mockDeploymentDeleter.EXPECT().DeleteDeployment(skipDrain, fakeStage).Return(nil)
-				newDeleteEnvCmd().Run(fakeStage, bicmd.DeleteEnvOpts{
-					Args: bicmd.DeleteEnvArgs{
-						Manifest: bicmd.FileBytesWithPathArg{Path: deploymentManifestPath},
+				newDeleteEnvCmd().Run(fakeStage, boshopts.DeleteEnvOpts{
+					Args: boshopts.DeleteEnvArgs{
+						Manifest: boshopts.FileBytesWithPathArg{Path: deploymentManifestPath},
 					},
 					SkipDrain: skipDrain,
-					VarFlags: bicmd.VarFlags{
+					VarFlags: boshopts.VarFlags{
 						VarKVs: []boshtpl.VarKV{{Name: "key", Value: "value"}},
 					},
-					OpsFlags: bicmd.OpsFlags{
-						OpsFiles: []bicmd.OpsFileArg{
+					OpsFlags: boshopts.OpsFlags{
+						OpsFiles: []boshopts.OpsFileArg{
 							{Ops: patch.Ops([]patch.Op{patch.ErrOp{}})},
 						},
 					},
@@ -110,17 +111,17 @@ var _ = Describe("DeleteEnvCmd", func() {
 		Context("state path is specified", func() {
 			It("sends the manifest on to the deleter", func() {
 				mockDeploymentDeleter.EXPECT().DeleteDeployment(skipDrain, fakeStage).Return(nil)
-				newDeleteEnvCmd().Run(fakeStage, bicmd.DeleteEnvOpts{
+				newDeleteEnvCmd().Run(fakeStage, boshopts.DeleteEnvOpts{
 					StatePath: "/new/state/file/path/state.json",
 					SkipDrain: skipDrain,
-					Args: bicmd.DeleteEnvArgs{
-						Manifest: bicmd.FileBytesWithPathArg{Path: deploymentManifestPath},
+					Args: boshopts.DeleteEnvArgs{
+						Manifest: boshopts.FileBytesWithPathArg{Path: deploymentManifestPath},
 					},
-					VarFlags: bicmd.VarFlags{
+					VarFlags: boshopts.VarFlags{
 						VarKVs: []boshtpl.VarKV{{Name: "key", Value: "value"}},
 					},
-					OpsFlags: bicmd.OpsFlags{
-						OpsFiles: []bicmd.OpsFileArg{
+					OpsFlags: boshopts.OpsFlags{
+						OpsFiles: []boshopts.OpsFileArg{
 							{Ops: patch.Ops([]patch.Op{patch.ErrOp{}})},
 						},
 					},
@@ -134,16 +135,16 @@ var _ = Describe("DeleteEnvCmd", func() {
 			It("sends the manifest on to the deleter", func() {
 				err := bosherr.Error("boom")
 				mockDeploymentDeleter.EXPECT().DeleteDeployment(skipDrain, fakeStage).Return(err)
-				returnedErr := newDeleteEnvCmd().Run(fakeStage, bicmd.DeleteEnvOpts{
-					Args: bicmd.DeleteEnvArgs{
-						Manifest: bicmd.FileBytesWithPathArg{Path: deploymentManifestPath},
+				returnedErr := newDeleteEnvCmd().Run(fakeStage, boshopts.DeleteEnvOpts{
+					Args: boshopts.DeleteEnvArgs{
+						Manifest: boshopts.FileBytesWithPathArg{Path: deploymentManifestPath},
 					},
 					SkipDrain: skipDrain,
-					VarFlags: bicmd.VarFlags{
+					VarFlags: boshopts.VarFlags{
 						VarKVs: []boshtpl.VarKV{{Name: "key", Value: "value"}},
 					},
-					OpsFlags: bicmd.OpsFlags{
-						OpsFiles: []bicmd.OpsFileArg{
+					OpsFlags: boshopts.OpsFlags{
+						OpsFiles: []boshopts.OpsFileArg{
 							{Ops: patch.Ops([]patch.Op{patch.ErrOp{}})},
 						},
 					},

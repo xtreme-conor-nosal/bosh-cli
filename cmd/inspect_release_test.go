@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -28,13 +29,13 @@ var _ = Describe("InspectReleaseCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts    InspectReleaseOpts
+			opts    boshopts.InspectReleaseOpts
 			release *fakedir.FakeRelease
 		)
 
 		BeforeEach(func() {
-			opts = InspectReleaseOpts{
-				Args: InspectReleaseArgs{
+			opts = boshopts.InspectReleaseOpts{
+				Args: boshopts.InspectReleaseArgs{
 					Slug: boshdir.NewReleaseSlug("some-name", "some-version"),
 				},
 			}

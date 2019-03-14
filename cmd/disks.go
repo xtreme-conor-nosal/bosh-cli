@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -17,7 +18,7 @@ func NewDisksCmd(ui boshui.UI, director boshdir.Director) DisksCmd {
 	return DisksCmd{ui: ui, director: director}
 }
 
-func (c DisksCmd) Run(opts DisksOpts) error {
+func (c DisksCmd) Run(opts boshopts.DisksOpts) error {
 	if !opts.Orphaned {
 		return errors.New("Only --orphaned is supported")
 	}

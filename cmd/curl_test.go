@@ -11,6 +11,7 @@ import (
 	"github.com/onsi/gomega/ghttp"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
 )
@@ -40,11 +41,11 @@ var _ = Describe("CurlCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts CurlOpts
+			opts boshopts.CurlOpts
 		)
 
 		BeforeEach(func() {
-			opts = CurlOpts{}
+			opts = boshopts.CurlOpts{}
 		})
 
 		act := func() error { return command.Run(opts) }
@@ -56,7 +57,7 @@ var _ = Describe("CurlCmd", func() {
 
 			It("does not return error and prints response body", func() {
 				opts.Args.Path = "/path?query=query-val"
-				opts.Headers = []CurlHeader{
+				opts.Headers = []boshopts.CurlHeader{
 					{Name: "Header1", Value: "header1-val"},
 					{Name: "Header2", Value: "header2-val1"},
 					{Name: "Header2", Value: "header2-val2"},
@@ -140,7 +141,7 @@ var _ = Describe("CurlCmd", func() {
 
 			It("does not return error and prints response body", func() {
 				opts.Args.Path = "/path?query=query-val"
-				opts.Headers = []CurlHeader{
+				opts.Headers = []boshopts.CurlHeader{
 					{Name: "Header1", Value: "header1-val"},
 					{Name: "Header2", Value: "header2-val1"},
 					{Name: "Header2", Value: "header2-val2"},
@@ -164,7 +165,7 @@ var _ = Describe("CurlCmd", func() {
 
 			It("accepts request body", func() {
 				opts.Args.Path = "/path?query=query-val"
-				opts.Body = FileBytesArg{
+				opts.Body = boshopts.FileBytesArg{
 					Bytes: []byte("req-body"),
 				}
 
@@ -244,7 +245,7 @@ var _ = Describe("CurlCmd", func() {
 
 			It("does not return error and prints response body", func() {
 				opts.Args.Path = "/path?query=query-val"
-				opts.Headers = []CurlHeader{
+				opts.Headers = []boshopts.CurlHeader{
 					{Name: "Header1", Value: "header1-val"},
 					{Name: "Header2", Value: "header2-val1"},
 					{Name: "Header2", Value: "header2-val2"},
@@ -268,7 +269,7 @@ var _ = Describe("CurlCmd", func() {
 
 			It("accepts request body", func() {
 				opts.Args.Path = "/path?query=query-val"
-				opts.Body = FileBytesArg{
+				opts.Body = boshopts.FileBytesArg{
 					Bytes: []byte("req-body"),
 				}
 
@@ -365,7 +366,7 @@ var _ = Describe("CurlCmd", func() {
 
 			It("returns error if any headers are provided (currently no supported)", func() {
 				opts.Args.Path = "/path"
-				opts.Headers = []CurlHeader{
+				opts.Headers = []boshopts.CurlHeader{
 					{Name: "Header1", Value: "header1-val"},
 				}
 
@@ -453,26 +454,26 @@ var _ = Describe("CurlCmd", func() {
 	})
 })
 
-var _ = Describe("CurlHeader", func() {
+var _ = Describe("boshopts.CurlHeader", func() {
 	Describe("UnmarshalFlag", func() {
 		var (
-			arg CurlHeader
+			arg boshopts.CurlHeader
 		)
 
 		BeforeEach(func() {
-			arg = CurlHeader{}
+			arg = boshopts.CurlHeader{}
 		})
 
 		It("sets name and value", func() {
 			err := (&arg).UnmarshalFlag("name: val")
 			Expect(err).ToNot(HaveOccurred())
-			Expect(arg).To(Equal(CurlHeader{Name: "name", Value: "val"}))
+			Expect(arg).To(Equal(boshopts.CurlHeader{Name: "name", Value: "val"}))
 		})
 
 		It("sets name and value when value contains a `: `", func() {
 			err := (&arg).UnmarshalFlag("name: val: ue")
 			Expect(err).ToNot(HaveOccurred())
-			Expect(arg).To(Equal(CurlHeader{Name: "name", Value: "val: ue"}))
+			Expect(arg).To(Equal(boshopts.CurlHeader{Name: "name", Value: "val: ue"}))
 		})
 
 		It("returns error if string does not have 2 pieces", func() {

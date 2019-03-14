@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"code.cloudfoundry.org/workpool"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -20,7 +21,7 @@ func NewInstancesCmd(ui boshui.UI, director boshdir.Director, parallel int) Inst
 	return InstancesCmd{ui: ui, director: director, parallel: parallel}
 }
 
-func (c InstancesCmd) Run(opts InstancesOpts) error {
+func (c InstancesCmd) Run(opts boshopts.InstancesOpts) error {
 	instTable := InstanceTable{
 		Processes: opts.Processes,
 		Details:   opts.Details,
@@ -46,7 +47,7 @@ func (c InstancesCmd) Run(opts InstancesOpts) error {
 	return c.printDeployments(instTable, opts)
 }
 
-func (c InstancesCmd) printDeployments(instTable InstanceTable, opts InstancesOpts) error {
+func (c InstancesCmd) printDeployments(instTable InstanceTable, opts boshopts.InstancesOpts) error {
 	deployments, err := c.director.Deployments()
 	if err != nil {
 		return err
@@ -105,7 +106,7 @@ func parallelInstanceInfos(deployments []boshdir.Deployment, parallel int) (map[
 	return vms, err
 }
 
-func (c InstancesCmd) printDeployment(dep boshdir.Deployment, instTable InstanceTable, opts InstancesOpts, instanceInfos []boshdir.VMInfo) {
+func (c InstancesCmd) printDeployment(dep boshdir.Deployment, instTable InstanceTable, opts boshopts.InstancesOpts, instanceInfos []boshdir.VMInfo) {
 	table := boshtbl.Table{
 		Title: fmt.Sprintf("Deployment '%s'", dep.Name()),
 

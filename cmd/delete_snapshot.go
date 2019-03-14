@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -14,7 +15,7 @@ func NewDeleteSnapshotCmd(ui boshui.UI, deployment boshdir.Deployment) DeleteSna
 	return DeleteSnapshotCmd{ui: ui, deployment: deployment}
 }
 
-func (c DeleteSnapshotCmd) Run(opts DeleteSnapshotOpts) error {
+func (c DeleteSnapshotCmd) Run(opts boshopts.DeleteSnapshotOpts) error {
 	err := c.ui.AskForConfirmation()
 	if err != nil {
 		return err

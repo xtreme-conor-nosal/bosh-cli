@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	"github.com/cloudfoundry/bosh-cli/crypto"
 	boshrel "github.com/cloudfoundry/bosh-cli/release"
 	boshjob "github.com/cloudfoundry/bosh-cli/release/job"
@@ -38,7 +39,7 @@ func NewRedigestReleaseCmd(
 	}
 }
 
-func (cmd RedigestReleaseCmd) Run(args RedigestReleaseArgs) error {
+func (cmd RedigestReleaseCmd) Run(args boshopts.RedigestReleaseArgs) error {
 	release, err := cmd.reader.Read(args.Path)
 	if err != nil {
 		return err

@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -27,11 +28,11 @@ var _ = Describe("DeleteReleaseCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts DeleteReleaseOpts
+			opts boshopts.DeleteReleaseOpts
 		)
 
 		BeforeEach(func() {
-			opts = DeleteReleaseOpts{}
+			opts = boshopts.DeleteReleaseOpts{}
 		})
 
 		act := func() error { return command.Run(opts) }

@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
 )
@@ -26,11 +27,11 @@ var _ = Describe("DeleteConfigCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts DeleteConfigOpts
+			opts boshopts.DeleteConfigOpts
 		)
 
 		BeforeEach(func() {
-			opts = DeleteConfigOpts{
+			opts = boshopts.DeleteConfigOpts{
 				Type: "my-type",
 				Name: "my-name",
 			}
@@ -50,7 +51,7 @@ var _ = Describe("DeleteConfigCmd", func() {
 
 		Context("when neither ID nor options are given", func() {
 			BeforeEach(func() {
-				opts = DeleteConfigOpts{}
+				opts = boshopts.DeleteConfigOpts{}
 			})
 
 			It("returns an error", func() {
@@ -62,8 +63,8 @@ var _ = Describe("DeleteConfigCmd", func() {
 
 		Context("when only ID is given", func() {
 			BeforeEach(func() {
-				opts = DeleteConfigOpts{
-					Args: DeleteConfigArgs{ID: "123"},
+				opts = boshopts.DeleteConfigOpts{
+					Args: boshopts.DeleteConfigArgs{ID: "123"},
 				}
 			})
 
@@ -90,8 +91,8 @@ var _ = Describe("DeleteConfigCmd", func() {
 		Context("when ID and type option is given", func() {
 
 			BeforeEach(func() {
-				opts = DeleteConfigOpts{
-					Args: DeleteConfigArgs{ID: "123"},
+				opts = boshopts.DeleteConfigOpts{
+					Args: boshopts.DeleteConfigArgs{ID: "123"},
 					Type: "my-type",
 				}
 			})
@@ -105,8 +106,8 @@ var _ = Describe("DeleteConfigCmd", func() {
 
 		Context("when ID and name option is given", func() {
 			BeforeEach(func() {
-				opts = DeleteConfigOpts{
-					Args: DeleteConfigArgs{ID: "123"},
+				opts = boshopts.DeleteConfigOpts{
+					Args: boshopts.DeleteConfigArgs{ID: "123"},
 					Name: "my-name",
 				}
 			})
@@ -120,7 +121,7 @@ var _ = Describe("DeleteConfigCmd", func() {
 
 		Context("when only the name option is given", func() {
 			BeforeEach(func() {
-				opts = DeleteConfigOpts{
+				opts = boshopts.DeleteConfigOpts{
 					Name: "my-name",
 				}
 			})
@@ -134,7 +135,7 @@ var _ = Describe("DeleteConfigCmd", func() {
 
 		Context("when only the type option is given", func() {
 			BeforeEach(func() {
-				opts = DeleteConfigOpts{
+				opts = boshopts.DeleteConfigOpts{
 					Type: "my-type",
 				}
 			})

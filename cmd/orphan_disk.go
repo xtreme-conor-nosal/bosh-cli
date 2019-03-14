@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -14,7 +15,7 @@ func NewOrphanDiskCmd(ui boshui.UI, director boshdir.Director) OrphanDiskCmd {
 	return OrphanDiskCmd{ui: ui, director: director}
 }
 
-func (c OrphanDiskCmd) Run(opts OrphanDiskOpts) error {
+func (c OrphanDiskCmd) Run(opts boshopts.OrphanDiskOpts) error {
 	err := c.ui.AskForConfirmation()
 	if err != nil {
 		return err

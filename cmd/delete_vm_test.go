@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
 )
@@ -26,12 +27,12 @@ var _ = Describe("DeleteVMCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts DeleteVMOpts
+			opts boshopts.DeleteVMOpts
 		)
 
 		BeforeEach(func() {
-			opts = DeleteVMOpts{
-				Args: DeleteVMArgs{CID: "some-cid"},
+			opts = boshopts.DeleteVMOpts{
+				Args: boshopts.DeleteVMArgs{CID: "some-cid"},
 			}
 		})
 

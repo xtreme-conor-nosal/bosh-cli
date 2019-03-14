@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -27,12 +28,12 @@ var _ = Describe("StartCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts StartOpts
+			opts boshopts.StartOpts
 		)
 
 		BeforeEach(func() {
-			opts = StartOpts{
-				Args: AllOrInstanceGroupOrInstanceSlugArgs{
+			opts = boshopts.StartOpts{
+				Args: boshopts.AllOrInstanceGroupOrInstanceSlugArgs{
 					Slug: boshdir.NewAllOrInstanceGroupOrInstanceSlug("some-name", ""),
 				},
 			}

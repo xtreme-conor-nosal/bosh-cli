@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -14,7 +15,7 @@ func NewRecreateCmd(ui boshui.UI, deployment boshdir.Deployment) RecreateCmd {
 	return RecreateCmd{ui: ui, deployment: deployment}
 }
 
-func (c RecreateCmd) Run(opts RecreateOpts) error {
+func (c RecreateCmd) Run(opts boshopts.RecreateOpts) error {
 	err := c.ui.AskForConfirmation()
 	if err != nil {
 		return err

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -15,7 +16,7 @@ func NewConfigsCmd(ui boshui.UI, director boshdir.Director) ConfigsCmd {
 	return ConfigsCmd{ui: ui, director: director}
 }
 
-func (c ConfigsCmd) Run(opts ConfigsOpts) error {
+func (c ConfigsCmd) Run(opts boshopts.ConfigsOpts) error {
 	filter := boshdir.ConfigsFilter{
 		Type: opts.Type,
 		Name: opts.Name,

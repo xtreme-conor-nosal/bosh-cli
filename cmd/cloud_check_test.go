@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -34,12 +35,12 @@ var _ = Describe("CloudCheckCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts         CloudCheckOpts
+			opts         boshopts.CloudCheckOpts
 			severalProbs []boshdir.Problem
 		)
 
 		BeforeEach(func() {
-			opts = CloudCheckOpts{}
+			opts = boshopts.CloudCheckOpts{}
 
 			severalProbs = []boshdir.Problem{
 				{

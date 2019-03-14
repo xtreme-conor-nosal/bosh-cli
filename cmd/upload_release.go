@@ -5,6 +5,7 @@ import (
 	boshsys "github.com/cloudfoundry/bosh-utils/system"
 	semver "github.com/cppforlife/go-semi-semantic/version"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshrel "github.com/cloudfoundry/bosh-cli/release"
 	boshreldir "github.com/cloudfoundry/bosh-cli/releasedir"
@@ -12,7 +13,7 @@ import (
 )
 
 type UploadReleaseCmd struct {
-	releaseDirFactory    func(DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir)
+	releaseDirFactory    func(boshopts.DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir)
 	releaseArchiveWriter boshrel.Writer
 
 	director              boshdir.Director
@@ -24,7 +25,7 @@ type UploadReleaseCmd struct {
 }
 
 func NewUploadReleaseCmd(
-	releaseDirFactory func(DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir),
+	releaseDirFactory func(boshopts.DirOrCWDArg) (boshrel.Reader, boshreldir.ReleaseDir),
 	releaseArchiveWriter boshrel.Writer,
 	director boshdir.Director,
 	releaseArchiveFactory func(string) boshdir.ReleaseArchive,
@@ -45,7 +46,7 @@ func NewUploadReleaseCmd(
 	}
 }
 
-func (c UploadReleaseCmd) Run(opts UploadReleaseOpts) error {
+func (c UploadReleaseCmd) Run(opts boshopts.UploadReleaseOpts) error {
 	switch {
 	case opts.Release != nil:
 		return c.uploadRelease(opts.Release, opts)
@@ -58,11 +59,11 @@ func (c UploadReleaseCmd) Run(opts UploadReleaseOpts) error {
 	}
 }
 
-func (c UploadReleaseCmd) uploadRemote(opts UploadReleaseOpts) error {
+func (c UploadReleaseCmd) uploadRemote(opts boshopts.UploadReleaseOpts) error {
 	return c.director.UploadReleaseURL(string(opts.Args.URL), opts.SHA1, opts.Rebase, opts.Fix)
 }
 
-func (c UploadReleaseCmd) uploadGit(opts UploadReleaseOpts) error {
+func (c UploadReleaseCmd) uploadGit(opts boshopts.UploadReleaseOpts) error {
 	repoPath, err := c.fs.TempDir("bosh-upload-release-git-clone")
 	if err != nil {
 		return bosherr.WrapErrorf(err, "Creating tmp dir for git cloning")
@@ -75,8 +76,8 @@ func (c UploadReleaseCmd) uploadGit(opts UploadReleaseOpts) error {
 		return bosherr.WrapErrorf(err, "Cloning git repo")
 	}
 
-	newOpts := UploadReleaseOpts{
-		Directory: DirOrCWDArg{Path: repoPath},
+	newOpts := boshopts.UploadReleaseOpts{
+		Directory: boshopts.DirOrCWDArg{Path: repoPath},
 		Name:      opts.Name,
 		Version:   opts.Version,
 		Fix:       opts.Fix,
@@ -85,7 +86,7 @@ func (c UploadReleaseCmd) uploadGit(opts UploadReleaseOpts) error {
 	return c.uploadFile(newOpts)
 }
 
-func (c UploadReleaseCmd) uploadFile(opts UploadReleaseOpts) error {
+func (c UploadReleaseCmd) uploadFile(opts boshopts.UploadReleaseOpts) error {
 	if c.releaseDirFactory == nil {
 		return bosherr.Errorf("Cannot upload non-remote release")
 	}
@@ -114,7 +115,7 @@ func (c UploadReleaseCmd) uploadFile(opts UploadReleaseOpts) error {
 	return c.uploadRelease(release, opts)
 }
 
-func (c UploadReleaseCmd) uploadRelease(release boshrel.Release, opts UploadReleaseOpts) error {
+func (c UploadReleaseCmd) uploadRelease(release boshrel.Release, opts boshopts.UploadReleaseOpts) error {
 	var pkgFpsToSkip []string
 	var err error
 
@@ -140,7 +141,7 @@ func (c UploadReleaseCmd) uploadRelease(release boshrel.Release, opts UploadRele
 	return c.director.UploadReleaseFile(file, opts.Rebase, opts.Fix)
 }
 
-func (c UploadReleaseCmd) uploadIfNecessary(opts UploadReleaseOpts, uploadFunc func(UploadReleaseOpts) error) error {
+func (c UploadReleaseCmd) uploadIfNecessary(opts boshopts.UploadReleaseOpts, uploadFunc func(boshopts.UploadReleaseOpts) error) error {
 	necessary, err := c.needToUpload(opts)
 	if err != nil || !necessary {
 		return err
@@ -149,7 +150,7 @@ func (c UploadReleaseCmd) uploadIfNecessary(opts UploadReleaseOpts, uploadFunc f
 	return uploadFunc(opts)
 }
 
-func (c UploadReleaseCmd) needToUpload(opts UploadReleaseOpts) (bool, error) {
+func (c UploadReleaseCmd) needToUpload(opts boshopts.UploadReleaseOpts) (bool, error) {
 	if opts.Fix {
 		return true, nil
 	}

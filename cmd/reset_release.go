@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshreldir "github.com/cloudfoundry/bosh-cli/releasedir"
 )
 
@@ -12,6 +13,6 @@ func NewResetReleaseCmd(releaseDir boshreldir.ReleaseDir) ResetReleaseCmd {
 	return ResetReleaseCmd{releaseDir: releaseDir}
 }
 
-func (c ResetReleaseCmd) Run(opts ResetReleaseOpts) error {
+func (c ResetReleaseCmd) Run(opts boshopts.ResetReleaseOpts) error {
 	return c.releaseDir.Reset()
 }

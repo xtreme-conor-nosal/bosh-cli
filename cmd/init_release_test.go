@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	fakereldir "github.com/cloudfoundry/bosh-cli/releasedir/releasedirfakes"
 )
 
@@ -23,11 +24,11 @@ var _ = Describe("InitReleaseCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts InitReleaseOpts
+			opts boshopts.InitReleaseOpts
 		)
 
 		BeforeEach(func() {
-			opts = InitReleaseOpts{}
+			opts = boshopts.InitReleaseOpts{}
 		})
 
 		act := func() error { return command.Run(opts) }

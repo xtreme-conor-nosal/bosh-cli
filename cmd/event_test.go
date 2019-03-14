@@ -5,6 +5,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -18,7 +19,7 @@ var _ = Describe("EventCmd", func() {
 		director *fakedir.FakeDirector
 		command  EventCmd
 		event    boshdir.Event
-		opts     EventOpts
+		opts     boshopts.EventOpts
 	)
 
 	BeforeEach(func() {

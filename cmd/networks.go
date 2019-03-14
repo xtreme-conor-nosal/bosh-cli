@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -17,7 +18,7 @@ func NewNetworksCmd(ui boshui.UI, director boshdir.Director) NetworksCmd {
 	return NetworksCmd{ui: ui, director: director}
 }
 
-func (c NetworksCmd) Run(opts NetworksOpts) error {
+func (c NetworksCmd) Run(opts boshopts.NetworksOpts) error {
 	if !opts.Orphaned {
 		return errors.New("Only --orphaned is supported")
 	}

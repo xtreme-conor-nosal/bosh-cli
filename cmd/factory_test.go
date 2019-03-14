@@ -11,6 +11,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -130,7 +131,7 @@ var _ = Describe("Factory", func() {
 				cmd, err := factory.New([]string{"ssh", "group", "cmd", "extra", "args"})
 				Expect(err).ToNot(HaveOccurred())
 
-				opts := cmd.Opts.(*SSHOpts)
+				opts := cmd.Opts.(*boshopts.SSHOpts)
 				Expect(opts.Command).To(Equal([]string{"cmd", "extra", "args"}))
 			})
 
@@ -138,7 +139,7 @@ var _ = Describe("Factory", func() {
 				cmd, err := factory.New([]string{"ssh", "group", "cmd", "extra", "args", "--", "--gw-disable"})
 				Expect(err).ToNot(HaveOccurred())
 
-				opts := cmd.Opts.(*SSHOpts)
+				opts := cmd.Opts.(*boshopts.SSHOpts)
 				Expect(opts.Command).To(Equal([]string{"cmd", "extra", "args", "--gw-disable"}))
 			})
 
@@ -173,7 +174,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"ssh", "group", "cmd", "extra", "args", "--", "--gw-disable"})
 			Expect(err).ToNot(HaveOccurred())
 
-			_, _, err = cmd.Opts.(*SSHOpts).GatewayFlags.AsSSHOpts()
+			_, _, err = cmd.Opts.(*boshopts.SSHOpts).GatewayFlags.AsSSHOpts()
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -181,7 +182,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"scp", "group", "cmd", "extra", "args", "--", "--gw-disable"})
 			Expect(err).ToNot(HaveOccurred())
 
-			_, _, err = cmd.Opts.(*SCPOpts).GatewayFlags.AsSSHOpts()
+			_, _, err = cmd.Opts.(*boshopts.SCPOpts).GatewayFlags.AsSSHOpts()
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -189,7 +190,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"logs", "-f", "cmd"})
 			Expect(err).ToNot(HaveOccurred())
 
-			_, _, err = cmd.Opts.(*LogsOpts).GatewayFlags.AsSSHOpts()
+			_, _, err = cmd.Opts.(*boshopts.LogsOpts).GatewayFlags.AsSSHOpts()
 			Expect(err).ToNot(HaveOccurred())
 		})
 	})
@@ -207,7 +208,7 @@ var _ = Describe("Factory", func() {
 			slug1, _ := boshdir.NewInstanceGroupOrInstanceSlugFromString("job1")
 			slug2, _ := boshdir.NewInstanceGroupOrInstanceSlugFromString("job2")
 
-			opts := cmd.Opts.(*DeployOpts)
+			opts := cmd.Opts.(*boshopts.DeployOpts)
 			Expect(opts.SkipDrain).To(Equal([]boshdir.SkipDrain{
 				{Slug: slug1},
 				{Slug: slug2},
@@ -224,7 +225,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"deploy", "--skip-drain", fakeFilePath})
 			Expect(err).ToNot(HaveOccurred())
 
-			opts := cmd.Opts.(*DeployOpts)
+			opts := cmd.Opts.(*boshopts.DeployOpts)
 			Expect(opts.SkipDrain).To(Equal([]boshdir.SkipDrain{
 				{All: true},
 			}))
@@ -246,7 +247,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"alias-env", "-e", "env", "alias"})
 			Expect(err).ToNot(HaveOccurred())
 
-			opts := cmd.Opts.(*AliasEnvOpts)
+			opts := cmd.Opts.(*boshopts.AliasEnvOpts)
 			Expect(opts.URL).To(Equal("env"))
 		})
 
@@ -254,9 +255,9 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"alias-env", "--ca-cert", "BEGIN ca-cert", "alias"})
 			Expect(err).ToNot(HaveOccurred())
 
-			opts := cmd.Opts.(*AliasEnvOpts)
+			opts := cmd.Opts.(*boshopts.AliasEnvOpts)
 			opts.CACert.FS = nil
-			Expect(opts.CACert).To(Equal(CACertArg{Content: "BEGIN ca-cert"}))
+			Expect(opts.CACert).To(Equal(boshopts.CACertArg{Content: "BEGIN ca-cert"}))
 		})
 	})
 
@@ -265,7 +266,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"events", "--deployment", "deployment"})
 			Expect(err).ToNot(HaveOccurred())
 
-			opts := cmd.Opts.(*EventsOpts)
+			opts := cmd.Opts.(*boshopts.EventsOpts)
 			Expect(opts.Deployment).To(Equal("deployment"))
 		})
 	})
@@ -275,7 +276,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"vms", "--deployment", "deployment"})
 			Expect(err).ToNot(HaveOccurred())
 
-			opts := cmd.Opts.(*VMsOpts)
+			opts := cmd.Opts.(*boshopts.VMsOpts)
 			Expect(opts.Deployment).To(Equal("deployment"))
 		})
 	})
@@ -285,7 +286,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"instances", "--deployment", "deployment"})
 			Expect(err).ToNot(HaveOccurred())
 
-			opts := cmd.Opts.(*InstancesOpts)
+			opts := cmd.Opts.(*boshopts.InstancesOpts)
 			Expect(opts.Deployment).To(Equal("deployment"))
 		})
 	})
@@ -295,7 +296,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"tasks", "--deployment", "deployment"})
 			Expect(err).ToNot(HaveOccurred())
 
-			opts := cmd.Opts.(*TasksOpts)
+			opts := cmd.Opts.(*boshopts.TasksOpts)
 			Expect(opts.Deployment).To(Equal("deployment"))
 		})
 	})
@@ -305,7 +306,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"task", "--deployment", "deployment"})
 			Expect(err).ToNot(HaveOccurred())
 
-			opts := cmd.Opts.(*TaskOpts)
+			opts := cmd.Opts.(*boshopts.TaskOpts)
 			Expect(opts.Deployment).To(Equal("deployment"))
 		})
 	})
@@ -315,7 +316,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"help"})
 			Expect(err).ToNot(HaveOccurred())
 
-			opts := cmd.Opts.(*MessageOpts)
+			opts := cmd.Opts.(*boshopts.MessageOpts)
 			Expect(opts.Message).To(ContainSubstring("Usage:"))
 			Expect(opts.Message).To(ContainSubstring("Application Options:"))
 			Expect(opts.Message).To(ContainSubstring("Available commands:"))
@@ -327,7 +328,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"--help"})
 			Expect(err).ToNot(HaveOccurred())
 
-			opts := cmd.Opts.(*MessageOpts)
+			opts := cmd.Opts.(*boshopts.MessageOpts)
 			Expect(opts.Message).To(ContainSubstring("Usage:"))
 			Expect(opts.Message).To(ContainSubstring(
 				"SSH into instance(s)                               https://bosh.io/docs/cli-v2#ssh"))
@@ -339,7 +340,7 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"ssh", "--help"})
 			Expect(err).ToNot(HaveOccurred())
 
-			opts := cmd.Opts.(*MessageOpts)
+			opts := cmd.Opts.(*boshopts.MessageOpts)
 			Expect(opts.Message).To(ContainSubstring("Usage:"))
 			Expect(opts.Message).To(ContainSubstring("SSH into instance(s)\n\nhttps://bosh.io/docs/cli-v2#ssh"))
 			Expect(opts.Message).To(ContainSubstring("Application Options:"))
@@ -352,43 +353,43 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New([]string{"--version"})
 			Expect(err).ToNot(HaveOccurred())
 
-			opts := cmd.Opts.(*MessageOpts)
+			opts := cmd.Opts.(*boshopts.MessageOpts)
 			Expect(opts.Message).To(Equal("version [DEV BUILD]\n"))
 		})
 	})
 
 	Describe("global options", func() {
-		clearNonGlobalOpts := func(boshOpts BoshOpts) BoshOpts {
+		clearNonGlobalOpts := func(boshOpts boshopts.BoshOpts) boshopts.BoshOpts {
 			boshOpts.VersionOpt = nil   // can't compare functions
 			boshOpts.CACertOpt.FS = nil // fs is populated by factory.New
-			boshOpts.UploadRelease = UploadReleaseOpts{}
-			boshOpts.ExportRelease = ExportReleaseOpts{}
-			boshOpts.RunErrand = RunErrandOpts{}
-			boshOpts.Logs = LogsOpts{}
-			boshOpts.Interpolate = InterpolateOpts{}
-			boshOpts.InitRelease = InitReleaseOpts{}
-			boshOpts.ResetRelease = ResetReleaseOpts{}
-			boshOpts.GenerateJob = GenerateJobOpts{}
-			boshOpts.GeneratePackage = GeneratePackageOpts{}
-			boshOpts.VendorPackage = VendorPackageOpts{}
-			boshOpts.CreateRelease = CreateReleaseOpts{}
-			boshOpts.FinalizeRelease = FinalizeReleaseOpts{}
-			boshOpts.Blobs = BlobsOpts{}
-			boshOpts.AddBlob = AddBlobOpts{}
-			boshOpts.RemoveBlob = RemoveBlobOpts{}
-			boshOpts.SyncBlobs = SyncBlobsOpts{}
-			boshOpts.UploadBlobs = UploadBlobsOpts{}
-			boshOpts.SSH = SSHOpts{}
-			boshOpts.SCP = SCPOpts{}
-			boshOpts.Deploy = DeployOpts{}
-			boshOpts.UpdateRuntimeConfig = UpdateRuntimeConfigOpts{}
-			boshOpts.VMs = VMsOpts{}
-			boshOpts.Instances = InstancesOpts{}
-			boshOpts.Config = ConfigOpts{}
-			boshOpts.Configs = ConfigsOpts{}
-			boshOpts.UpdateConfig = UpdateConfigOpts{}
-			boshOpts.DeleteConfig = DeleteConfigOpts{}
-			boshOpts.Curl = CurlOpts{}
+			boshOpts.UploadRelease = boshopts.UploadReleaseOpts{}
+			boshOpts.ExportRelease = boshopts.ExportReleaseOpts{}
+			boshOpts.RunErrand = boshopts.RunErrandOpts{}
+			boshOpts.Logs = boshopts.LogsOpts{}
+			boshOpts.Interpolate = boshopts.InterpolateOpts{}
+			boshOpts.InitRelease = boshopts.InitReleaseOpts{}
+			boshOpts.ResetRelease = boshopts.ResetReleaseOpts{}
+			boshOpts.GenerateJob = boshopts.GenerateJobOpts{}
+			boshOpts.GeneratePackage = boshopts.GeneratePackageOpts{}
+			boshOpts.VendorPackage = boshopts.VendorPackageOpts{}
+			boshOpts.CreateRelease = boshopts.CreateReleaseOpts{}
+			boshOpts.FinalizeRelease = boshopts.FinalizeReleaseOpts{}
+			boshOpts.Blobs = boshopts.BlobsOpts{}
+			boshOpts.AddBlob = boshopts.AddBlobOpts{}
+			boshOpts.RemoveBlob = boshopts.RemoveBlobOpts{}
+			boshOpts.SyncBlobs = boshopts.SyncBlobsOpts{}
+			boshOpts.UploadBlobs = boshopts.UploadBlobsOpts{}
+			boshOpts.SSH = boshopts.SSHOpts{}
+			boshOpts.SCP = boshopts.SCPOpts{}
+			boshOpts.Deploy = boshopts.DeployOpts{}
+			boshOpts.UpdateRuntimeConfig = boshopts.UpdateRuntimeConfigOpts{}
+			boshOpts.VMs = boshopts.VMsOpts{}
+			boshOpts.Instances = boshopts.InstancesOpts{}
+			boshOpts.Config = boshopts.ConfigOpts{}
+			boshOpts.Configs = boshopts.ConfigsOpts{}
+			boshOpts.UpdateConfig = boshopts.UpdateConfigOpts{}
+			boshOpts.DeleteConfig = boshopts.DeleteConfigOpts{}
+			boshOpts.Curl = boshopts.CurlOpts{}
 			return boshOpts
 		}
 
@@ -397,7 +398,7 @@ var _ = Describe("Factory", func() {
 			Expect(err).ToNot(HaveOccurred())
 
 			// Check against entire BoshOpts to avoid future missing assertions
-			Expect(clearNonGlobalOpts(cmd.BoshOpts)).To(Equal(BoshOpts{
+			Expect(clearNonGlobalOpts(cmd.BoshOpts)).To(Equal(boshopts.BoshOpts{
 				ConfigPathOpt: "~/.bosh/config",
 				Parallel:      5,
 			}))
@@ -422,10 +423,10 @@ var _ = Describe("Factory", func() {
 			cmd, err := factory.New(opts)
 			Expect(err).ToNot(HaveOccurred())
 
-			Expect(clearNonGlobalOpts(cmd.BoshOpts)).To(Equal(BoshOpts{
+			Expect(clearNonGlobalOpts(cmd.BoshOpts)).To(Equal(boshopts.BoshOpts{
 				ConfigPathOpt:     "config",
 				EnvironmentOpt:    "env",
-				CACertOpt:         CACertArg{Content: "BEGIN ca-cert"},
+				CACertOpt:         boshopts.CACertArg{Content: "BEGIN ca-cert"},
 				ClientOpt:         "client",
 				ClientSecretOpt:   "client-secret",
 				DeploymentOpt:     "dep",

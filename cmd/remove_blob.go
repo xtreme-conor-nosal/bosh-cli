@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshreldir "github.com/cloudfoundry/bosh-cli/releasedir"
 	biui "github.com/cloudfoundry/bosh-cli/ui"
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
@@ -15,7 +16,7 @@ func NewRemoveBlobCmd(blobsDir boshreldir.BlobsDir, ui biui.UI) RemoveBlobCmd {
 	return RemoveBlobCmd{blobsDir: blobsDir, ui: ui}
 }
 
-func (c RemoveBlobCmd) Run(opts RemoveBlobOpts) error {
+func (c RemoveBlobCmd) Run(opts boshopts.RemoveBlobOpts) error {
 	err := c.blobsDir.UntrackBlob(opts.Args.BlobsPath)
 	if err != nil {
 		return bosherr.WrapErrorf(err, "Untracking blob")

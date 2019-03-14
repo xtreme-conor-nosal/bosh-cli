@@ -26,6 +26,7 @@ import (
 	bicloud "github.com/cloudfoundry/bosh-cli/cloud"
 	mock_cloud "github.com/cloudfoundry/bosh-cli/cloud/mocks"
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	biconfig "github.com/cloudfoundry/bosh-cli/config"
 	bicpirel "github.com/cloudfoundry/bosh-cli/cpi/release"
 	fakebicrypto "github.com/cloudfoundry/bosh-cli/crypto/fakes"
@@ -1065,6 +1066,6 @@ cloud_provider:
 	})
 })
 
-func newDeployOpts(manifestPath string, statePath string) CreateEnvOpts {
-	return CreateEnvOpts{StatePath: statePath, Args: CreateEnvArgs{Manifest: FileBytesWithPathArg{Path: manifestPath}}}
+func newDeployOpts(manifestPath string, statePath string) boshopts.CreateEnvOpts {
+	return boshopts.CreateEnvOpts{StatePath: statePath, Args: boshopts.CreateEnvArgs{Manifest: boshopts.FileBytesWithPathArg{Path: manifestPath}}}
 }

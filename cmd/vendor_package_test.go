@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshpkg "github.com/cloudfoundry/bosh-cli/release/pkg"
 	fakerel "github.com/cloudfoundry/bosh-cli/release/releasefakes"
 	. "github.com/cloudfoundry/bosh-cli/release/resource"
@@ -28,11 +29,11 @@ var _ = Describe("VendorPackageCmd", func() {
 		srcReleaseDir = &fakereldir.FakeReleaseDir{}
 		dstReleaseDir = &fakereldir.FakeReleaseDir{}
 
-		releaseDirFactory := func(dir DirOrCWDArg) boshreldir.ReleaseDir {
+		releaseDirFactory := func(dir boshopts.DirOrCWDArg) boshreldir.ReleaseDir {
 			switch dir {
-			case DirOrCWDArg{Path: "/src-dir"}:
+			case boshopts.DirOrCWDArg{Path: "/src-dir"}:
 				return srcReleaseDir
-			case DirOrCWDArg{Path: "/dst-dir"}:
+			case boshopts.DirOrCWDArg{Path: "/dst-dir"}:
 				return dstReleaseDir
 			default:
 				panic("Unexpected release dir")
@@ -45,16 +46,16 @@ var _ = Describe("VendorPackageCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts VendorPackageOpts
+			opts boshopts.VendorPackageOpts
 		)
 
 		BeforeEach(func() {
-			opts = VendorPackageOpts{
-				Args: VendorPackageArgs{
+			opts = boshopts.VendorPackageOpts{
+				Args: boshopts.VendorPackageArgs{
 					PackageName: "pkg1-name",
-					URL:         DirOrCWDArg{Path: "/src-dir"},
+					URL:         boshopts.DirOrCWDArg{Path: "/src-dir"},
 				},
-				Directory: DirOrCWDArg{Path: "/dst-dir"},
+				Directory: boshopts.DirOrCWDArg{Path: "/dst-dir"},
 			}
 		})
 

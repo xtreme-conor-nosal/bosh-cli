@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
@@ -17,7 +18,7 @@ func NewInspectReleaseCmd(ui boshui.UI, director boshdir.Director) InspectReleas
 	return InspectReleaseCmd{ui: ui, director: director}
 }
 
-func (c InspectReleaseCmd) Run(opts InspectReleaseOpts) error {
+func (c InspectReleaseCmd) Run(opts boshopts.InspectReleaseOpts) error {
 	release, err := c.director.FindRelease(opts.Args.Slug)
 	if err != nil {
 		return err

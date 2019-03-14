@@ -9,6 +9,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -47,11 +48,11 @@ var _ = Describe("UploadStemcellCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts UploadStemcellOpts
+			opts boshopts.UploadStemcellOpts
 		)
 
 		BeforeEach(func() {
-			opts = UploadStemcellOpts{}
+			opts = boshopts.UploadStemcellOpts{}
 		})
 
 		act := func() error { return command.Run(opts) }
@@ -107,7 +108,7 @@ var _ = Describe("UploadStemcellCmd", func() {
 			Context("when a director supports StemcellMatches", func() {
 				It("uploads a stemcell when any CPI is missing it", func() {
 					opts.Name = "existing-name"
-					opts.Version = VersionArg(semver.MustNewVersionFromString("existing-ver"))
+					opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("existing-ver"))
 
 					director.StemcellNeedsUploadReturns(
 						true,
@@ -134,7 +135,7 @@ var _ = Describe("UploadStemcellCmd", func() {
 
 				It("does not upload stemcell if no CPI needs that name and version", func() {
 					opts.Name = "existing-name"
-					opts.Version = VersionArg(semver.MustNewVersionFromString("existing-ver"))
+					opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("existing-ver"))
 
 					director.StemcellNeedsUploadReturns(false, true, nil)
 
@@ -168,7 +169,7 @@ var _ = Describe("UploadStemcellCmd", func() {
 
 				It("does not upload stemcell if name and version match existing stemcell", func() {
 					opts.Name = "existing-name"
-					opts.Version = VersionArg(semver.MustNewVersionFromString("existing-ver"))
+					opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("existing-ver"))
 
 					director.HasStemcellReturns(true, nil)
 
@@ -186,7 +187,7 @@ var _ = Describe("UploadStemcellCmd", func() {
 
 				It("uploads stemcell if name and version does not match existing stemcell", func() {
 					opts.Name = "existing-name"
-					opts.Version = VersionArg(semver.MustNewVersionFromString("existing-ver"))
+					opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("existing-ver"))
 
 					director.HasStemcellReturns(false, nil)
 

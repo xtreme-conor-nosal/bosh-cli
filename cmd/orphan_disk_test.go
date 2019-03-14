@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
 )
@@ -26,12 +27,12 @@ var _ = Describe("OrphanDiskCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts OrphanDiskOpts
+			opts boshopts.OrphanDiskOpts
 		)
 
 		BeforeEach(func() {
-			opts = OrphanDiskOpts{
-				Args: OrphanDiskArgs{CID: "disk-cid"},
+			opts = boshopts.OrphanDiskOpts{
+				Args: boshopts.OrphanDiskArgs{CID: "disk-cid"},
 			}
 		})
 

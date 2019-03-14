@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
 )
@@ -26,11 +27,11 @@ var _ = Describe("CleanUpCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts CleanUpOpts
+			opts boshopts.CleanUpOpts
 		)
 
 		BeforeEach(func() {
-			opts = CleanUpOpts{}
+			opts = boshopts.CleanUpOpts{}
 		})
 
 		act := func() error { return command.Run(opts) }

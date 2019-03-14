@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -29,11 +30,11 @@ var _ = Describe("ConfigsCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts ConfigsOpts
+			opts boshopts.ConfigsOpts
 		)
 
 		BeforeEach(func() {
-			opts = ConfigsOpts{Recent: 1}
+			opts = boshopts.ConfigsOpts{Recent: 1}
 			configs = []boshdir.Config{
 				boshdir.Config{Type: "my-type", Name: "some-name", Team: "team1"},
 				boshdir.Config{Type: "my-type", Name: "other-name"},
@@ -92,7 +93,7 @@ var _ = Describe("ConfigsCmd", func() {
 
 		Context("When filtering for type", func() {
 			BeforeEach(func() {
-				opts = ConfigsOpts{
+				opts = boshopts.ConfigsOpts{
 					Type:   "my-type",
 					Recent: 1,
 				}
@@ -135,7 +136,7 @@ var _ = Describe("ConfigsCmd", func() {
 
 		Context("When filtering for name", func() {
 			BeforeEach(func() {
-				opts = ConfigsOpts{
+				opts = boshopts.ConfigsOpts{
 					Name:   "some-name",
 					Recent: 1,
 				}
@@ -178,7 +179,7 @@ var _ = Describe("ConfigsCmd", func() {
 
 		Context("When filtering for both, type and name", func() {
 			BeforeEach(func() {
-				opts = ConfigsOpts{
+				opts = boshopts.ConfigsOpts{
 					Type:   "my-type",
 					Name:   "some-name",
 					Recent: 1,
@@ -222,7 +223,7 @@ var _ = Describe("ConfigsCmd", func() {
 
 		Context("limit is specified", func() {
 			BeforeEach(func() {
-				opts = ConfigsOpts{Recent: 2}
+				opts = boshopts.ConfigsOpts{Recent: 2}
 				configs = []boshdir.Config{
 					boshdir.Config{Type: "my-type", Name: "some-name", ID: "123"},
 					boshdir.Config{Type: "my-type", Name: "some-name", ID: "234"},

@@ -3,6 +3,7 @@ package cmd
 import (
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshtpl "github.com/cloudfoundry/bosh-cli/director/template"
 	boshui "github.com/cloudfoundry/bosh-cli/ui"
@@ -17,7 +18,7 @@ func NewUpdateCloudConfigCmd(ui boshui.UI, director boshdir.Director) UpdateClou
 	return UpdateCloudConfigCmd{ui: ui, director: director}
 }
 
-func (c UpdateCloudConfigCmd) Run(opts UpdateCloudConfigOpts) error {
+func (c UpdateCloudConfigCmd) Run(opts boshopts.UpdateCloudConfigOpts) error {
 	tpl := boshtpl.NewTemplate(opts.Args.CloudConfig.Bytes)
 
 	bytes, err := tpl.Evaluate(opts.VarFlags.AsVariables(), opts.OpsFlags.AsOp(), boshtpl.EvaluateOpts{})

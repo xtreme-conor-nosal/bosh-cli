@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -27,10 +28,10 @@ var _ = Describe("RuntimeConfigCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts RuntimeConfigOpts
+			opts boshopts.RuntimeConfigOpts
 		)
 		BeforeEach(func() {
-			opts = RuntimeConfigOpts{
+			opts = boshopts.RuntimeConfigOpts{
 				Name: "some-foo-config",
 			}
 		})

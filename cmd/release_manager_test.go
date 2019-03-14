@@ -9,6 +9,7 @@ import (
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
 	fakecmd "github.com/cloudfoundry/bosh-cli/cmd/cmdfakes"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	boshrel "github.com/cloudfoundry/bosh-cli/release"
 	fakerel "github.com/cloudfoundry/bosh-cli/release/releasefakes"
@@ -23,7 +24,7 @@ var _ = Describe("ReleaseManager", func() {
 
 	BeforeEach(func() {
 		createReleaseCmd = &fakecmd.FakeReleaseCreatingCmd{
-			RunStub: func(opts CreateReleaseOpts) (boshrel.Release, error) {
+			RunStub: func(opts boshopts.CreateReleaseOpts) (boshrel.Release, error) {
 				release := &fakerel.FakeRelease{
 					NameStub:    func() string { return opts.Name },
 					VersionStub: func() string { return opts.Name + "-created-ver" },
@@ -68,17 +69,17 @@ releases:
 			Expect(err).ToNot(HaveOccurred())
 
 			Expect(uploadReleaseCmd.RunCallCount()).To(Equal(4))
-			runArgs := []UploadReleaseOpts{
+			runArgs := []boshopts.UploadReleaseOpts{
 				uploadReleaseCmd.RunArgsForCall(0),
 				uploadReleaseCmd.RunArgsForCall(1),
 				uploadReleaseCmd.RunArgsForCall(2),
 				uploadReleaseCmd.RunArgsForCall(3),
 			}
 
-			var capiRelease UploadReleaseOpts
-			var consulRelease UploadReleaseOpts
-			var compiledRelease UploadReleaseOpts
-			var localRelease UploadReleaseOpts
+			var capiRelease boshopts.UploadReleaseOpts
+			var consulRelease boshopts.UploadReleaseOpts
+			var compiledRelease boshopts.UploadReleaseOpts
+			var localRelease boshopts.UploadReleaseOpts
 			for _, opts := range runArgs {
 				switch opts.Name {
 				case "capi":
@@ -92,27 +93,27 @@ releases:
 				}
 			}
 
-			Expect(capiRelease).To(Equal(UploadReleaseOpts{
+			Expect(capiRelease).To(Equal(boshopts.UploadReleaseOpts{
 				Name:    "capi",
-				Args:    UploadReleaseArgs{URL: URLArg("https://capi-url")},
+				Args:    boshopts.UploadReleaseArgs{URL: boshopts.URLArg("https://capi-url")},
 				SHA1:    "capi-sha1",
-				Version: VersionArg(semver.MustNewVersionFromString("1+capi")),
+				Version: boshopts.VersionArg(semver.MustNewVersionFromString("1+capi")),
 			}))
-			Expect(consulRelease).To(Equal(UploadReleaseOpts{
+			Expect(consulRelease).To(Equal(boshopts.UploadReleaseOpts{
 				Name:    "consul",
-				Args:    UploadReleaseArgs{URL: URLArg("https://consul-url")},
+				Args:    boshopts.UploadReleaseArgs{URL: boshopts.URLArg("https://consul-url")},
 				SHA1:    "consul-sha1",
-				Version: VersionArg(semver.MustNewVersionFromString("1+consul")),
+				Version: boshopts.VersionArg(semver.MustNewVersionFromString("1+consul")),
 			}))
-			Expect(compiledRelease).To(Equal(UploadReleaseOpts{
+			Expect(compiledRelease).To(Equal(boshopts.UploadReleaseOpts{
 				Name:    "compiled-release",
-				Args:    UploadReleaseArgs{URL: URLArg("https://compiled-release-url")},
+				Args:    boshopts.UploadReleaseArgs{URL: boshopts.URLArg("https://compiled-release-url")},
 				SHA1:    "compiled-release-sha1",
-				Version: VersionArg(semver.MustNewVersionFromString("1+compiled-release")),
+				Version: boshopts.VersionArg(semver.MustNewVersionFromString("1+compiled-release")),
 
 				Stemcell: boshdir.NewOSVersionSlug("ubuntu-trusty", "3421"),
 			}))
-			Expect(localRelease).To(Equal(UploadReleaseOpts{
+			Expect(localRelease).To(Equal(boshopts.UploadReleaseOpts{
 				Release: localRelease.Release, // only Release should be set
 			}))
 		})
@@ -146,13 +147,13 @@ releases:
 			Expect(err).ToNot(HaveOccurred())
 
 			Expect(createReleaseCmd.RunCallCount()).To(Equal(2))
-			runArgs := []CreateReleaseOpts{
+			runArgs := []boshopts.CreateReleaseOpts{
 				createReleaseCmd.RunArgsForCall(0),
 				createReleaseCmd.RunArgsForCall(1),
 			}
 
-			var capiRelease CreateReleaseOpts
-			var consulRelease CreateReleaseOpts
+			var capiRelease boshopts.CreateReleaseOpts
+			var consulRelease boshopts.CreateReleaseOpts
 			for _, opts := range runArgs {
 				switch opts.Name {
 				case "capi":
@@ -162,16 +163,16 @@ releases:
 				}
 			}
 
-			Expect(capiRelease).To(Equal(CreateReleaseOpts{
+			Expect(capiRelease).To(Equal(boshopts.CreateReleaseOpts{
 				Name:             "capi",
-				Directory:        DirOrCWDArg{Path: "/capi-dir"},
+				Directory:        boshopts.DirOrCWDArg{Path: "/capi-dir"},
 				TimestampVersion: true,
 				Force:            true,
 			}))
 
-			Expect(consulRelease).To(Equal(CreateReleaseOpts{
+			Expect(consulRelease).To(Equal(boshopts.CreateReleaseOpts{
 				Name:             "consul",
-				Directory:        DirOrCWDArg{Path: "/consul-dir"},
+				Directory:        boshopts.DirOrCWDArg{Path: "/consul-dir"},
 				TimestampVersion: true,
 				Force:            true,
 			}))

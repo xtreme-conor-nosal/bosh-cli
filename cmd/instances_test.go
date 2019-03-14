@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
@@ -30,7 +31,7 @@ var _ = Describe("InstancesCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts           InstancesOpts
+			opts           boshopts.InstancesOpts
 			infos          []boshdir.VMInfo
 			procCPUTotal   float64
 			procMemPercent float64
@@ -41,7 +42,7 @@ var _ = Describe("InstancesCmd", func() {
 		act := func() error { return command.Run(opts) }
 
 		BeforeEach(func() {
-			opts = InstancesOpts{}
+			opts = boshopts.InstancesOpts{}
 
 			index1 := 1
 			index2 := 2

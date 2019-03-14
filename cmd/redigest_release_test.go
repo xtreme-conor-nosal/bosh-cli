@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshrel "github.com/cloudfoundry/bosh-cli/release"
 	boshjob "github.com/cloudfoundry/bosh-cli/release/job"
 	boshpkg "github.com/cloudfoundry/bosh-cli/release/pkg"
@@ -32,7 +33,7 @@ var _ = Describe("RedigestRelease", func() {
 		fmv                          *fakefu.FakeMover
 		releaseWriter                *fakerel.FakeWriter
 		command                      RedigestReleaseCmd
-		args                         RedigestReleaseArgs
+		args                         boshopts.RedigestReleaseArgs
 		fakeDigestCalculator         *fakes.FakeDigestCalculator
 		releaseWriterTempDestination string
 		fs                           *fakes2.FakeFileSystem
@@ -63,9 +64,9 @@ var _ = Describe("RedigestRelease", func() {
 	}
 
 	BeforeEach(func() {
-		args = RedigestReleaseArgs{
+		args = boshopts.RedigestReleaseArgs{
 			Path:        "/some/release_128.tgz",
-			Destination: FileArg{ExpandedPath: "/some/release_256.tgz"},
+			Destination: boshopts.FileArg{ExpandedPath: "/some/release_256.tgz"},
 		}
 
 		fs.RegisterOpenFile(job1ResourcePath, createFakeFileWithKnownSha1())
@@ -332,9 +333,9 @@ var _ = Describe("RedigestRelease", func() {
 
 	Context("Given a bad file path", func() {
 		BeforeEach(func() {
-			args = RedigestReleaseArgs{
+			args = boshopts.RedigestReleaseArgs{
 				Path:        "/some/release_128.tgz",
-				Destination: FileArg{ExpandedPath: "/some/release_256.tgz"},
+				Destination: boshopts.FileArg{ExpandedPath: "/some/release_256.tgz"},
 			}
 
 			releaseReader.ReadReturns(nil, errors.Error("disaster"))

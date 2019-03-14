@@ -8,6 +8,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshrel "github.com/cloudfoundry/bosh-cli/release"
 	fakerel "github.com/cloudfoundry/bosh-cli/release/releasefakes"
 	fakereldir "github.com/cloudfoundry/bosh-cli/releasedir/releasedirfakes"
@@ -32,13 +33,13 @@ var _ = Describe("FinalizeReleaseCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts    FinalizeReleaseOpts
+			opts    boshopts.FinalizeReleaseOpts
 			release *fakerel.FakeRelease
 		)
 
 		BeforeEach(func() {
-			opts = FinalizeReleaseOpts{
-				Args: FinalizeReleaseArgs{Path: "/archive-path"},
+			opts = boshopts.FinalizeReleaseOpts{
+				Args: boshopts.FinalizeReleaseArgs{Path: "/archive-path"},
 			}
 
 			release = &fakerel.FakeRelease{
@@ -90,7 +91,7 @@ var _ = Describe("FinalizeReleaseCmd", func() {
 
 		It("finalizes release based on path, using custom name and version", func() {
 			opts.Name = "custom-name"
-			opts.Version = VersionArg(semver.MustNewVersionFromString("custom-ver"))
+			opts.Version = boshopts.VersionArg(semver.MustNewVersionFromString("custom-ver"))
 
 			releaseReader.ReadStub = func(path string) (boshrel.Release, error) {
 				Expect(path).To(Equal("/archive-path"))

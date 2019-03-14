@@ -7,6 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	fakedir "github.com/cloudfoundry/bosh-cli/director/directorfakes"
 )
@@ -24,11 +25,11 @@ var _ = Describe("TakeSnapshotCmd", func() {
 
 	Describe("Run", func() {
 		var (
-			opts TakeSnapshotOpts
+			opts boshopts.TakeSnapshotOpts
 		)
 
 		BeforeEach(func() {
-			opts = TakeSnapshotOpts{}
+			opts = boshopts.TakeSnapshotOpts{}
 		})
 
 		act := func() error { return command.Run(opts) }

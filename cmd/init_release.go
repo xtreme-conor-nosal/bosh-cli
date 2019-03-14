@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshreldir "github.com/cloudfoundry/bosh-cli/releasedir"
 )
 
@@ -12,6 +13,6 @@ func NewInitReleaseCmd(releaseDir boshreldir.ReleaseDir) InitReleaseCmd {
 	return InitReleaseCmd{releaseDir: releaseDir}
 }
 
-func (c InitReleaseCmd) Run(opts InitReleaseOpts) error {
+func (c InitReleaseCmd) Run(opts boshopts.InitReleaseOpts) error {
 	return c.releaseDir.Init(opts.Git)
 }

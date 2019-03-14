@@ -4,6 +4,7 @@ import (
 	bosherr "github.com/cloudfoundry/bosh-utils/errors"
 	semver "github.com/cppforlife/go-semi-semantic/version"
 
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	boshdir "github.com/cloudfoundry/bosh-cli/director"
 	biui "github.com/cloudfoundry/bosh-cli/ui"
 )
@@ -27,7 +28,7 @@ func NewUploadStemcellCmd(
 	}
 }
 
-func (c UploadStemcellCmd) Run(opts UploadStemcellOpts) error {
+func (c UploadStemcellCmd) Run(opts boshopts.UploadStemcellOpts) error {
 	if opts.Args.URL.IsRemote() {
 		return c.uploadRemote(string(opts.Args.URL), opts)
 	}
@@ -35,7 +36,7 @@ func (c UploadStemcellCmd) Run(opts UploadStemcellOpts) error {
 	return c.uploadFile(opts.Args.URL.FilePath(), opts.Fix)
 }
 
-func (c UploadStemcellCmd) uploadRemote(url string, opts UploadStemcellOpts) error {
+func (c UploadStemcellCmd) uploadRemote(url string, opts boshopts.UploadStemcellOpts) error {
 	version := semver.Version(opts.Version)
 
 	necessary, err := c.needToUpload(opts.Name, version.AsString(), opts.Fix)

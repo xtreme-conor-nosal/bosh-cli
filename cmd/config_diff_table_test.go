@@ -5,6 +5,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	. "github.com/cloudfoundry/bosh-cli/cmd"
+	boshopts "github.com/cloudfoundry/bosh-cli/cmd/opts"
 	fakeui "github.com/cloudfoundry/bosh-cli/ui/fakes"
 	boshtbl "github.com/cloudfoundry/bosh-cli/ui/table"
 )
@@ -12,13 +13,13 @@ import (
 var _ = Describe("DiffConfigTable", func() {
 	var (
 		ui   *fakeui.FakeUI
-		opts DiffConfigOpts
+		opts boshopts.DiffConfigOpts
 		diff Diff
 	)
 
 	BeforeEach(func() {
 		ui = &fakeui.FakeUI{}
-		opts = DiffConfigOpts{
+		opts = boshopts.DiffConfigOpts{
 			FromID: "1",
 			ToID:   "2",
 		}
